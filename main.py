@@ -67,10 +67,11 @@ def querytodatabase(sql,querytype=0, *args):
             cursor.execute(sql,args)
             #print 구문
             if querytype == 0:
-                result = cursor.fetchall()                
+                result = cursor.fetchall()  
+
             #ddl 실행시(insert/remove 등)
             else:
-                connection.commit()
+                res = connection.commit()
     finally:
         connection.close()
     return result
@@ -85,10 +86,39 @@ def printallstudents():
 # B - 3. Insert a new university    
 def insertanewuniversity():
     print('3')
+    import pymysql
+    p = True
+    while p:
+        try:
+            temp=[]
+            temp.append(input('University name: '))
+            temp.append(input('University capacity: '))
+            temp.append(input('University group: '))
+            temp.append(input('Cutline score: '))
+            temp.append(input('Weight of high school records: '))
+            querytodatabase('insert into Schools(school_name,capacity,school_district,min_score,adjust_ratio) values(%s,%s,%s,%s,%s)',1,*temp)
+            print('A university is successfully inserted.')
+            p = False
+        except pymysql.err.InternalError:
+            print('your value is wrong. retry')
+        
+
+    print('2')
 # B - 4. Remove a university
 def removeauniversity():
     print('4')
-
+    import pymysql
+    p = True
+    while p:
+        try:
+            temp=''
+            temp=input('school_id: ')
+            querytodatabase('delete from Schools where school_id = %s',1,temp)
+            print('A university is successfully deleted.')
+            p = False
+        except pymysql.err.InternalError:
+            print('your value is wrong. retry')
+removeauniversity()
 # C - 5. Insert a new student   
 def insertanewstudent():    
     print('5')

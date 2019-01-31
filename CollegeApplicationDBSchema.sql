@@ -1,4 +1,5 @@
 use ds3_4_project;
+
 drop table if exists Schools cascade;
 drop table if exists Students cascade;
 drop table if exists Apply cascade;
