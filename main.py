@@ -77,7 +77,8 @@ def querytodatabase(sql,querytype, *args):
 
 # A - 1. Print all universities
 def printalluniversities():
-    print('1')
+    print(querytodatabase('select * from Students limit 10','query'))
+    
 # A - 2. Print all students
 def printallstudents():
     print('2')
@@ -89,7 +90,7 @@ def removeauniversity():
     print('4')
 
 # C - 5. Insert a new student   
-def insertanewstudent():
+def insertanewstudent():    
     print('5')
 # C - 6. Remove a student
 def removeastudent():
