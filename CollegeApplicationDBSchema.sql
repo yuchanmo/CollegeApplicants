@@ -1,4 +1,4 @@
-use ds3_4;
+use ds3_4_project;
 drop table if exists Schools cascade;
 drop table if exists Students cascade;
 drop table if exists Apply cascade;
@@ -28,9 +28,8 @@ create table Students
 create table Apply
 (
 	student_id int unsigned not null,
-    school_id int unsigned not null,
+    school_id int unsigned not null,    
     constraint pk_apply primary key(student_id,school_id),
-	constraint fk_apply_student foreign key(student_id) references students(student_id),
-    constraint fk_apply_school foreign key(shool_id) references students(shool_id)
+	constraint fk_apply_student foreign key(student_id) references Students(student_id),
+    constraint fk_apply_school foreign key(school_id) references Schools(school_id)
 );
-    
