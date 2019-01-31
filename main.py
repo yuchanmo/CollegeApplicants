@@ -90,15 +90,56 @@ def querytodatabase(sql,querytype=0, *args):
 
 # A - 1. Print all universities
 def printalluniversities():
-    print(scholls_head)
-    print(querytodatabase('select * from Students limit 10 where student_name like %s',0,'A%'))
+    print(scholls_head)   
+    import pymysql.cursors
+    connection = pymysql.connect(
+        host = 'ds1.snu.ac.kr',
+        user = 'ds3_4',
+        password = '1q2w3e4r5t!',
+        db = 'ds3_4_project',
+        charset = 'utf8',
+        cursorclass = pymysql.cursors.DictCursor
+    )
+    result = None
+
+    try:
+        with connection.cursor() as cursor:
+            sql = 'select * from Schools'
+            cursor.execute(sql)
+            result = cursor.fetchall()
+    finally:
+        connection.close()
+     
+    for row in result:
+        print(str(row['school_id']) + '\t'+row['school_name'] + '\t\t\t\t\t'+str(row['capacity']) + '\t'+row['school_district'] + '\t'+str(row['min_score']) + '\t'+str(row['adjust_ratio']) )
     print(tail)
 
 # A - 2. Print all students
 def printallstudents():
-    print(students_head)
-    print(querytodatabase('select * from Students limit 10 where student_name like %s',0,'A%'))
+    print(students_head)   
+    import pymysql.cursors
+    connection = pymysql.connect(
+        host = 'ds1.snu.ac.kr',
+        user = 'ds3_4',
+        password = '1q2w3e4r5t!',
+        db = 'ds3_4_project',
+        charset = 'utf8',
+        cursorclass = pymysql.cursors.DictCursor
+    )
+    result = None
+
+    try:
+        with connection.cursor() as cursor:
+            sql = 'select * from Students'
+            cursor.execute(sql)
+            result = cursor.fetchall()
+    finally:
+        connection.close()
+     
+    for row in result:
+        print(str(row['student_id']) + '\t'+row['student_name'] + '\t\t\t'+str(row['test_score']) + '\t'+str(row['school_grades']) + '\t') 
     print(tail)
+
 
 # B - 3. Insert a new university    
 def insertanewuniversity():
@@ -155,7 +196,7 @@ menu_selection={
 }
 
 menu_list ='''
-============================================================
+======================================================================
 1. print all universities
 2. print all students
 3. insert a new university
@@ -169,7 +210,7 @@ menu_list ='''
 11. print universities expected to accept a student
 12. exit
 13. reset database
-============================================================'''
+======================================================================'''
 
 
 def main():
