@@ -50,6 +50,19 @@
 # I - 12. Exit
 # J - 13. Reset database
 
+scholls_head ='''
+----------------------------------------------------------------------
+id      name        capacity        group   cutline     weight  appled
+----------------------------------------------------------------------'''
+
+students_head ='''
+----------------------------------------------------------------------
+id      name        csat_score      scholl_score
+----------------------------------------------------------------------'''
+
+tail='''
+----------------------------------------------------------------------'''
+
 
 def querytodatabase(sql,querytype=0, *args):
     import pymysql.cursors
@@ -77,11 +90,16 @@ def querytodatabase(sql,querytype=0, *args):
 
 # A - 1. Print all universities
 def printalluniversities():
+    print(scholls_head)
     print(querytodatabase('select * from Students limit 10 where student_name like %s',0,'A%'))
+    print(tail)
 
 # A - 2. Print all students
 def printallstudents():
-    print('2')
+    print(students_head)
+    print(querytodatabase('select * from Students limit 10 where student_name like %s',0,'A%'))
+    print(tail)
+
 # B - 3. Insert a new university    
 def insertanewuniversity():
     print('3')
