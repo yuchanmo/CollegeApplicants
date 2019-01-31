@@ -135,9 +135,28 @@ menu_selection={
     13:resetdatabase
 }
 
+menu_list ='''
+            ============================================================
+            1. print all universities
+            2. print all students
+            3. insert a new university
+            4. remove a university
+            5. insert a new student
+            6. remove a student
+            7. make an application
+            8. print all students who applied for a university
+            9. print all universities a student applied for
+            10. print expected successful applicants of a university
+            11. print universities expected to accept a student
+            12. exit
+            13. reset database
+            ============================================================'''
+
+
 def main():
     while True:
-        menu_num = eval(input('메뉴 번호를 입력하세요'))        
+        print(menu_list)
+        menu_num = eval(input('Select your action : '))        
         if menu_num in menu_selection.keys():
             menu_selection[menu_num]()
         elif menu_num == 12:
