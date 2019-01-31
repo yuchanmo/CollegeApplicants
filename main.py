@@ -51,7 +51,7 @@
 # J - 13. Reset database
 
 
-def querytodatabase(sql,querytype, *args):
+def querytodatabase(sql,querytype=0, *args):
     import pymysql.cursors
     connection = pymysql.connect(
         host = 'ds1.snu.ac.kr',
@@ -66,7 +66,7 @@ def querytodatabase(sql,querytype, *args):
         with connection.cursor() as cursor:            
             cursor.execute(sql,args)
             #print 구문
-            if querytype == 'query':
+            if querytype == 0:
                 result = cursor.fetchall()                
             #ddl 실행시(insert/remove 등)
             else:
@@ -77,8 +77,8 @@ def querytodatabase(sql,querytype, *args):
 
 # A - 1. Print all universities
 def printalluniversities():
-    print(querytodatabase('select * from Students limit 10','query'))
-    
+    print(querytodatabase('select * from Students limit 10 where student_name like %s',0,'A%'))
+
 # A - 2. Print all students
 def printallstudents():
     print('2')
