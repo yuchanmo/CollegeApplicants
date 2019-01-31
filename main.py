@@ -34,3 +34,117 @@
 # 3. 리포트 (pdf 포맷으로 제출해주세요!)
 # 파일명: PRJ_조이름.pdf (예: PRJ_12조.pdf)
 
+
+
+# A - 1. Print all universities
+# A - 2. Print all students
+# B - 3. Insert a new university
+# B - 4. Remove a university
+# C - 5. Insert a new student
+# C - 6. Remove a student
+# D - 7. Make a application
+# E - 8. Print all students who applied for a university
+# F - 9. Print all universities a students applied for
+# G - 10. Print expected successful applicants of a university
+# H - 11. Print universities expected to accept a student
+# I - 12. Exit
+# J - 13. Reset database
+
+
+menu_num = 0
+menu_selection={
+    1:printalluniversities,
+    2:printallstudents,
+    3:insertanewuniversity,
+    4:removeauniversity,
+    5:insertanewstudent,
+    6:removeastudent,
+    7:makeaapplication,
+    8:printallstudentsappliedforauniversity,
+    9:printalluniversitiesastudentsappliedfor,
+    10:printexpectedsuccessfulapplicantsofauniversity,
+    11:printuniversitiesexpectedtoacceptastudent,    
+    13:resetdatabase
+}
+
+def main():
+    while True:
+        menu_num = eval(input('메뉴 번호를 입력하세요'))        
+        if menu_num in menu_selection.keys():
+            menu_selection[menu_num]()
+        elif menu_num == 12:
+            break
+        else:
+            print('잘못된 번호 입력하였습니다')
+
+
+            
+        
+
+def querytodatabase(sql,querytype, *args):
+    import pymysql.cursors
+    connection = pymysql.connect(
+        host = 'ds1.snu.ac.kr',
+        user = 'ds3_4',
+        password = '1q2w3e4r5t!',
+        db = 'ds3_4_project',
+        charset = 'utf8',
+        cursorclass = pymysql.cursors.DictCursor
+    )
+    result = None
+    try:  
+        with connection.cursor() as cursor:            
+            cursor.execute(sql,args)
+            #print 구문
+            if querytype == 'query':
+                result = cursor.fetchall()                
+            #ddl 실행시(insert/remove 등)
+            else:
+                connection.commit()
+    finally:
+        connection.close()
+    return result
+
+# A - 1. Print all universities
+def printalluniversities():
+    pass
+# A - 2. Print all students
+def printallstudents():
+    pass
+# B - 3. Insert a new university    
+def insertanewuniversity():
+    pass
+# B - 4. Remove a university
+def removeauniversity():
+    pass
+
+# C - 5. Insert a new student   
+def insertanewstudent():
+    pass
+# C - 6. Remove a student
+def removeastudent():
+    pass
+
+# D - 7. Make a application
+def makeaapplication():
+    pass
+
+#E - 8. Print all students who applied for a university
+def printallstudentsappliedforauniversity():
+    pass
+
+#F - 9. Print all universities a students applied for
+def printalluniversitiesastudentsappliedfor():
+    pass
+
+#G - 10. Print expected successful applicants of a university
+def printexpectedsuccessfulapplicantsofauniversity():
+    pass
+
+#H - 11. Print universities expected to accept a student
+def printuniversitiesexpectedtoacceptastudent():
+    pass
+
+#J - 13. Reset database
+def resetdatabase():
+    pass
