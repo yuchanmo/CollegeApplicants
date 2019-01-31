@@ -77,8 +77,7 @@ def main():
         else:
             print('잘못된 번호 입력하였습니다')
 
-
-            
+main()        
         
 
 def querytodatabase(sql,querytype, *args):

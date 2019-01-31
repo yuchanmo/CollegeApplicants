@@ -7,7 +7,7 @@ create table Schools
 school_id int unsigned primary key auto_increment,
 school_name nvarchar(200) not null,
 capacity int not null,
-school_district char(1) not null,
+school_district char(2) not null,
 min_score int unsigned not null,
 adjust_ratio float unsigned not null,
 constraint capacity_ck check (capacity > 1),

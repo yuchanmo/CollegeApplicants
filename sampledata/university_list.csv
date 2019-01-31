@@ -1,0 +1,400 @@
+school_name,capacity,school_district,min_score,adjust_ratio 
+Alabama A & M University,12,A,82,62
+University of Alabama at Birmingham,87,A,66,95
+Amridge University,19,A,22,8
+University of Alabama in Huntsville,28,A,86,77
+Alabama State University,97,A,24,88
+The University of Alabama,99,A,39,39
+Central Alabama Community College,52,A,30,79
+Athens State University,94,A,39,41
+Auburn University at Montgomery,92,A,52,20
+Auburn University,71,A,65,35
+Birmingham Southern College,61,A,23,96
+Chattahoochee Valley Community College,91,A,76,17
+Concordia College Alabama,10,A,40,28
+South University-Montgomery,14,A,65,15
+Enterprise State Community College,35,A,31,67
+Coastal Alabama Community College,55,A,46,81
+Faulkner University,23,A,76,91
+Gadsden State Community College,8,A,69,39
+New Beginning College of Cosmetology,72,A,2,72
+George C Wallace Community College-Dothan,45,A,66,70
+George C Wallace State Community College-Hanceville,85,A,60,21
+George C Wallace State Community College-Selma,87,A,79,77
+Herzing University-Birmingham,39,A,69,52
+Huntingdon College,48,A,18,51
+Heritage Christian University,76,A,54,82
+J. F. Drake State Community and Technical College,11,A,89,87
+J F Ingram State Technical College,77,A,17,23
+Jacksonville State University,42,A,82,34
+Jefferson Davis Community College,79,A,92,44
+Jefferson State Community College,58,A,1,52
+John C Calhoun State Community College,53,A,18,16
+Judson College,48,A,87,41
+Lawson State Community College-Birmingham Campus,85,A,19,17
+University of West Alabama,75,A,24,49
+Lurleen B Wallace Community College,23,A,78,59
+Marion Military Institute,39,A,23,82
+Miles College,43,A,17,27
+University of Mobile,24,A,71,15
+University of Montevallo,96,A,14,50
+Northwest-Shoals Community College,11,A,95,19
+University of North Alabama,81,A,59,16
+Northeast Alabama Community College,34,A,1,89
+Oakwood University,96,A,96,51
+Alabama Southern Community College,75,A,88,37
+Prince Institute-Southeast,76,A,42,99
+Reid State Technical College,90,A,22,62
+Bishop State Community College,54,A,12,87
+Samford University,50,A,35,1
+Selma University,14,A,57,76
+Shelton State Community College,37,A,14,54
+Snead State Community College,100,A,93,43
+University of South Alabama,29,A,34,35
+Spring Hill College,66,A,39,27
+Southeastern Bible College,89,A,42,53
+Stillman College,68,A,38,35
+Talladega College,90,A,53,66
+H Councill Trenholm State Community College,35,B,9,67
+Troy University,86,B,27,34
+Tuskegee University,55,B,2,50
+United States Sports Academy,93,B,76,65
+Bevill State Community College,88,B,93,30
+University of Alaska Anchorage,69,B,11,14
+Alaska Bible College,44,B,66,54
+University of Alaska Fairbanks,40,B,71,33
+University of Alaska Southeast,64,B,90,76
+Alaska Pacific University,59,B,5,2
+AVTEC-Alaska's Institute of Technology,8,B,52,25
+Charter College,3,B,51,30
+Alaska Career College,94,B,49,11
+Empire Beauty School-Tucson,78,B,95,100
+Thunderbird School of Global Management,51,B,59,10
+American Institute of Trucking,14,B,19,34
+Carrington College-Phoenix North,22,B,3,9
+Carrington College-Mesa,23,B,59,44
+Carrington College-Tucson,29,B,19,16
+CollegeAmerica-Flagstaff,17,B,81,78
+Arizona Academy of Beauty-East,2,B,11,23
+Arizona Automotive Institute,52,B,1,27
+Brookline College-Phoenix,91,B,18,98
+Arizona State University-Tempe,41,B,69,79
+Arizona Western College,59,B,29,91
+University of Arizona,61,B,40,52
+Southwest University of Visual Arts-Tucson,49,B,100,5
+Central Arizona College,30,B,82,13
+Brown Mackie College-Tucson,83,B,35,61
+Charles of Italy Beauty College,37,B,75,25
+Cochise County Community College District,46,B,50,31
+Empire Beauty School-Flagstaff,34,B,94,27
+Empire Beauty School-Chandler,25,B,63,68
+Cortiva Institute-Tucson,87,B,20,59
+Avalon School of Cosmetology-Mesa,55,B,29,94
+Eastern Arizona College,2,B,34,75
+Embry-Riddle Aeronautical University-Prescott,51,B,28,42
+School of Architecture at Taliesin,54,B,34,80
+Glendale Community College,68,B,41,32
+Grand Canyon University,74,B,57,15
+Olympian Academy of Cosmetology,82,B,3,42
+GateWay Community College,74,B,20,51
+Mesa Community College,10,B,43,77
+Mohave Community College,31,B,5,54
+Universal Technical Institute of Arizona Inc-Motorcycle Mechanics Institute Division,30,B,26,27
+Dine College,82,B,31,97
+Northern Arizona University,43,B,97,31
+Northland Pioneer College,15,B,77,65
+Ottawa University-Phoenix,56,B,91,34
+Phoenix College,16,B,52,71
+Cortiva Institute-Scottsdale,27,B,10,85
+Pima Community College,70,B,9,32
+Pima Medical Institute-Tucson,64,B,32,83
+Pima Medical Institute-Albuquerque,27,B,68,33
+Prescott College,64,B,59,45
+Refrigeration School Inc,35,B,54,17
+Rio Salado College,10,B,70,7
+Roberto-Venn School of Luthiery,58,B,17,43
+Hair Academy of Safford,74,B,57,61
+Scottsdale Community College,58,B,73,23
+South Mountain Community College,87,B,90,75
+Arizona Christian University,29,B,41,22
+Tucson College,81,B,14,47
+Universal Technical Institute of Arizona Inc,14,B,10,72
+Western International University,40,B,8,2
+Empire Beauty School-NW Phoenix,82,B,88,88
+Yavapai College,24,B,21,43
+University of Arkansas at Little Rock,58,B,81,96
+University of Arkansas for Medical Sciences,18,B,99,21
+Arkansas Baptist College,70,B,60,30
+Arkansas Beauty School-Little Rock,41,B,85,11
+Arkansas Beauty College,88,B,31,98
+Lyon College,61,C,56,83
+Arkansas College of Barbering and Hair Design,59,C,76,45
+Arthur's Beauty College Inc-Fort Smith,95,C,95,1
+University of Arkansas,21,C,51,17
+University of Arkansas at Pine Bluff,59,C,73,48
+Arkansas State University-Beebe,39,C,65,48
+Arkansas State University-Main Campus,72,C,51,33
+Arkansas Tech University,47,C,87,45
+University of Arkansas at Monticello,84,C,17,83
+Arthur's Beauty College Inc-Jacksonville,87,C,19,91
+Baptist Health College-Little Rock,77,C,16,88
+Black River Technical College,59,C,30,94
+University of Central Arkansas,83,C,37,64
+Central Baptist College,8,C,60,63
+Cossatot Community College of the University of Arkansas,96,C,48,11
+Crowley's Ridge College,26,C,92,39
+Crowley's Ridge Technical Institute,28,C,11,47
+East Arkansas Community College,67,C,7,93
+Eastern College of Health Vocations-Little Rock,79,C,77,58
+Imagine-Paul Mitchell Partner School,81,C,60,91
+National Park College,36,C,82,73
+University of Arkansas Community College-Batesville,85,C,40,51
+Harding University,52,C,81,82
+Henderson State University,91,C,4,49
+Hendrix College,41,C,52,49
+Hot Springs Beauty College,24,C,4,66
+Jefferson Regional Medical Center School of Nursing,83,C,97,31
+John Brown University,84,C,38,30
+Career Academy of Hair Design,97,C,78,55
+Academy of Salon and Spa,72,C,90,36
+Arkansas State University Mid-South,54,C,17,95
+Arkansas Northeastern College,80,C,48,29
+New Tyler Barber College Inc,11,C,30,47
+North Arkansas College,20,C,88,14
+Northwest Technical Institute,56,C,50,64
+Ouachita Baptist University,77,C,1,85
+College of the Ouachitas,89,C,58,1
+Ozarka College,59,C,78,39
+University of the Ozarks,63,C,11,60
+University of Arkansas Community College-Morrilton,65,C,66,93
+Philander Smith College,92,C,72,47
+Phillips Community College of the University of Arkansas,62,C,29,92
+Southeast Arkansas College,58,C,2,59
+Professional Cosmetology Education Center,95,C,55,13
+University of Arkansas-Pulaski Technical College,16,C,55,100
+University of Arkansas Community College-Hope,31,C,94,19
+University of Arkansas Community College Rich Mountain,100,C,28,18
+Paul Mitchell the School-Arkansas,46,C,65,14
+Searcy Beauty College,58,C,53,96
+Shorter College,43,C,72,91
+Williams Baptist College,90,C,85,65
+South Arkansas Community College,20,C,97,30
+Southern Arkansas University Main Campus,42,C,97,42
+Southern Arkansas University Tech,74,C,58,83
+Velvatex College of Beauty Culture,20,C,66,79
+University of Arkansas-Fort Smith,19,C,79,23
+Academy of Art University,36,C,31,63
+Academy of Chinese Culture and Health Sciences,59,C,73,53
+The Academy of Radio and TV Broadcasting,82,C,2,36
+Avalon School of Cosmetology-Alameda,80,C,18,49
+College of Alameda,48,C,98,88
+Allan Hancock College,32,C,53,93
+American Academy of Dramatic Arts-Los Angeles,76,C,98,2
+American Baptist Seminary of the West,76,C,28,22
+American Film Institute Conservatory,56,C,20,1
+American Beauty College,22,C,14,8
+American Career College-Los Angeles,18,C,73,2
+American Conservatory Theater,74,C,77,70
+American River College,55,A,23,65
+Antelope Valley College,9,A,69,41
+Art Center College of Design,64,A,24,90
+Associated Technical College-Los Angeles,100,A,50,22
+Associated Technical College-San Diego,75,A,98,77
+Azusa Pacific University,83,A,92,18
+Bakersfield College,42,A,78,52
+Barstow Community College,47,A,69,51
+Bellus Academy-National City,10,A,51,2
+Bethesda University,92,A,67,76
+Biola University,45,A,43,38
+Brownson Technical School,16,A,80,79
+Bryan University,32,A,83,51
+Butte College,88,A,43,69
+Phillips Graduate University,85,A,14,77
+California Institute of Integral Studies,87,A,43,74
+Cabrillo College,45,A,20,22
+California Baptist University,98,A,46,37
+California College of the Arts,92,A,50,61
+University of California-Hastings College of Law,88,A,91,65
+California Institute of Technology,45,A,35,96
+California Lutheran University,1,A,22,74
+California Polytechnic State University-San Luis Obispo,28,A,79,98
+Alliant International University-San Diego,26,A,56,17
+California State University-Bakersfield,84,A,99,14
+California State University-Stanislaus,86,A,6,93
+California State University-San Bernardino,72,A,79,46
+California State Polytechnic University-Pomona,89,A,3,11
+California State University-Chico,57,A,90,93
+California State University-Dominguez Hills,75,A,66,45
+California State University-Fresno,10,A,61,60
+California State University-Fullerton,75,A,100,57
+California State University-East Bay,28,A,61,67
+California State University-Long Beach,53,A,27,95
+California State University-Los Angeles,74,A,38,60
+California State University-Northridge,99,A,42,46
+California State University-Sacramento,1,A,64,75
+University of California-Berkeley,79,A,22,88
+University of California-Davis,83,A,75,88
+University of California-Irvine,83,A,85,69
+University of California-Los Angeles,21,A,50,34
+University of California-Riverside,82,A,13,76
+University of California-San Diego,5,A,23,28
+University of California-San Francisco,89,A,67,29
+University of California-Santa Barbara,92,A,53,10
+University of California-Santa Cruz,90,A,84,100
+Sofia University,23,A,86,51
+California Beauty School,32,A,12,29
+California Christian College,64,A,42,31
+Le Cordon Bleu College of Culinary Arts-San Francisco,52,A,94,50
+California Hair Design Academy,10,A,61,52
+California Institute of the Arts,7,A,68,29
+California State University Maritime Academy,3,A,10,95
+California Western School of Law,88,A,68,86
+Canada College,76,A,86,16
+College of the Canyons,46,A,50,15
+Career Academy of Beauty,46,B,85,78
+Casa Loma College-Van Nuys,47,B,74,68
+CET-San Diego,57,B,74,1
+CET-San Jose,35,B,24,63
+CET-El Centro,82,B,14,63
+CET-Colton,10,B,45,83
+CET-Watsonville,18,B,30,28
+CET-Salinas,19,B,10,77
+Cerritos College,13,B,35,67
+Cerro Coso Community College,80,B,28,80
+Chabot College,29,B,23,7
+Chaffey College,22,B,17,33
+Chapman University,5,B,87,65
+Charles R Drew University of Medicine and Science,93,B,18,16
+Concordia University-Irvine,85,B,15,22
+San Diego Christian College,86,B,19,46
+Church Divinity School of the Pacific,99,B,92,57
+Citrus College,62,B,49,100
+Citrus Heights Beauty College,4,B,18,36
+City College of San Francisco,33,B,30,15
+Claremont Graduate University,33,B,35,54
+Claremont McKenna College,36,B,79,62
+Milan Institute-Visalia,78,B,36,23
+Clovis Adult Education,100,B,22,66
+Coastline Community College,5,B,83,48
+Cogswell College,76,B,41,75
+Coleman University,19,B,46,29
+Coba Academy,99,B,31,42
+Western University of Health Sciences,51,B,42,99
+Columbia College,84,B,62,3
+Columbia College Hollywood,44,B,15,45
+El Camino College-Compton Center,61,B,44,52
+Contra Costa College,31,B,92,45
+Cosumnes River College,27,B,31,18
+Crafton Hills College,79,B,34,94
+Cuesta College,69,B,95,94
+Cuyamaca College,30,B,87,11
+Cypress College,26,B,84,35
+De Anza College,58,B,99,76
+International School of Beauty Inc,84,B,92,25
+Dell'Arte International School of Physical Theatre,90,B,31,25
+College of the Desert,73,B,97,95
+Design Institute of San Diego,37,B,22,45
+Diablo Valley College,75,B,19,62
+Dominican University of California,61,B,44,64
+Dominican School of Philosophy & Theology,5,B,78,17
+East Los Angeles College,38,B,98,98
+El Camino Community College District,16,B,31,87
+Elegance International,26,B,50,27
+Emperor's College of Traditional Oriental Medicine,1,B,5,15
+Empire College,96,B,81,88
+Evergreen Valley College,21,B,97,15
+FIDM-Fashion Institute of Design & Merchandising-Los Angeles,84,B,91,12
+FIDM-Fashion Institute of Design & Merchandising-San Francisco,26,B,98,6
+FIDM-Fashion Institute of Design & Merchandising-Orange County,43,B,75,85
+Feather River Community College District,12,B,54,55
+Federico Beauty Institute,59,B,72,22
+Fielding Graduate University,92,C,63,2
+Five Branches University,16,C,60,45
+Hair California Beauty Academy,45,C,13,38
+Redondo Beach Beauty College,93,C,92,50
+Foothill College,40,C,39,20
+Franciscan School of Theology,59,C,35,97
+Fredrick and Charles Beauty College,30,C,60,5
+Fresno City College,95,C,89,74
+Fresno Pacific University,21,C,29,32
+Fuller Theological Seminary,10,C,43,32
+Fullerton College,51,C,67,36
+Gavilan College,32,C,75,70
+Gemological Institute of America-Carlsbad,61,C,87,99
+Glendale Community College,40,C,55,43
+Glendale Career College,78,C,64,48
+Golden Gate University-San Francisco,11,C,2,77
+Golden West College,83,C,38,25
+Graduate Theological Union,4,C,87,80
+Grossmont College,73,C,26,8
+Salon Success Academy-Riverside,46,C,97,4
+Hartnell College,4,C,42,8
+Harvey Mudd College,24,C,44,10
+Hilltop Beauty School,20,C,85,90
+Holy Names University,99,C,34,10
+Pacifica Graduate Institute,30,C,97,86
+Humboldt State University,96,C,15,64
+Humphreys University-Stockton and Modesto Campuses,12,C,24,53
+Imperial Valley College,58,C,37,34
+Institute for Business and Technology,81,C,24,22
+Interior Designers Institute,39,C,81,85
+Toni & Guy Hairdressing Academy-Santa Monica,91,C,68,98
+Irvine Valley College,100,C,23,77
+Bellus Academy-El Cajon,34,C,45,10
+John F. Kennedy University,85,C,34,60
+American Jewish University,9,C,95,7
+Reedley College,18,C,14,48
+Life Pacific College,63,C,100,97
+Argosy University-The Art Institute of California-San Diego,73,C,70,12
+University of La Verne,69,C,49,96
+Laguna College of Art and Design,38,C,49,7
+Lake Tahoe Community College,67,C,26,44
+Lancaster Beauty School,67,C,76,55
+Laney College,44,C,16,50
+Lassen Community College,56,C,74,60
+Life Chiropractic College West,85,C,14,75
+Lincoln University,90,C,53,13
+Southern California Seminary,85,C,62,80
+La Sierra University,82,C,14,67
+Loma Linda University,53,C,46,34
+Long Beach City College,17,C,46,92
+Southern California University of Health Sciences,64,C,70,37
+Los Angeles Harbor College,29,C,1,12
+Los Angeles Pierce College,99,C,80,60
+Los Angeles Southwest College,99,C,77,41
+Los Angeles Trade Technical College,49,C,23,58
+Los Angeles Valley College,32,C,42,20
+The Master's University and Seminary,66,C,68,20
+Los Angeles City College,27,C,64,89
+Los Angeles County College of Nursing and Allied Health,54,C,62,92
+Los Angeles Mission College,44,C,22,56
+Los Medanos College,66,C,61,66
+Argosy University-The Art Institute of California-San Francisco,37,C,52,24
+Loyola Marymount University,52,C,11,59
+Lu Ross Academy,9,C,32,26
+Lyle's College of  Beauty,85,C,45,64
+Lytles Redwood Empire Beauty College Inc,95,C,6,77
+MTI Business College Inc,62,C,2,60
+MTI College,10,C,10,45
+Brightwood College-Sacramento,46,C,51,76
+Brightwood College-San Diego,51,C,10,44
+Brightwood College-Vista,43,C,60,85
+College of Marin,49,C,72,68
+Marymount California University,42,C,61,19
+Mendocino College,19,C,41,69
+Menlo College,6,C,27,53
+Merced College,68,C,98,12
+Merritt College,89,C,38,90
+Mills College,63,C,79,58
+MiraCosta College,11,C,32,68
+Mission College,73,C,94,37
+Modern Beauty Academy,86,C,15,18
+Brightwood College-Los Angeles-Van Nuys,21,C,18,88
+Modesto Junior College,96,C,88,31
+Moler Barber College,15,C,95,52
+Middlebury Institute of International Studies at Monterey,44,C,4,22
+Monterey Peninsula College,79,C,46,96
+Moorpark College,69,C,69,44
+Mt San Antonio College,78,C,95,35
+Mount Saint Mary's University,14,C,28,76
+Mt San Jacinto Community College District,54,C,14,67
