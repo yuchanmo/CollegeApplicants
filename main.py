@@ -52,12 +52,12 @@
 
 scholls_head ='''
 ----------------------------------------------------------------------
-id      name        capacity        group   cutline     weight  appled
+id\tname\t\tcapacity\tgroup\tcutline\tweight\tappled
 ----------------------------------------------------------------------'''
 
 students_head ='''
 ----------------------------------------------------------------------
-id      name        csat_score      scholl_score
+id\tname\t\tcsat_score\tscholl_score
 ----------------------------------------------------------------------'''
 
 tail='''
@@ -111,7 +111,7 @@ def printalluniversities():
         connection.close()
      
     for row in result:
-        print(str(row['school_id']) + '\t'+row['school_name'] + '\t\t\t\t\t'+str(row['capacity']) + '\t'+row['school_district'] + '\t'+str(row['min_score']) + '\t'+str(row['adjust_ratio']) )
+        print(str(row['school_id']) + '\t'+row['school_name'] + '\t'+str(row['capacity']) + '\t\t'+row['school_district'] + '\t'+str(row['min_score']) + '\t'+str(row['adjust_ratio']) )
     print(tail)
 
 # A - 2. Print all students
@@ -137,7 +137,7 @@ def printallstudents():
         connection.close()
      
     for row in result:
-        print(str(row['student_id']) + '\t'+row['student_name'] + '\t\t\t'+str(row['test_score']) + '\t'+str(row['school_grades']) + '\t') 
+        print(str(row['student_id']) + '\t'+row['student_name'] + '\t\t'+str(row['test_score']) + '\t\t'+str(row['school_grades'])) 
     print(tail)
 
 
