@@ -51,6 +51,74 @@
 # J - 13. Reset database
 
 
+def querytodatabase(sql,querytype, *args):
+    import pymysql.cursors
+    connection = pymysql.connect(
+        host = 'ds1.snu.ac.kr',
+        user = 'ds3_4',
+        password = '1q2w3e4r5t!',
+        db = 'ds3_4_project',
+        charset = 'utf8',
+        cursorclass = pymysql.cursors.DictCursor
+    )
+    result = None
+    try:  
+        with connection.cursor() as cursor:            
+            cursor.execute(sql,args)
+            #print 구문
+            if querytype == 'query':
+                result = cursor.fetchall()                
+            #ddl 실행시(insert/remove 등)
+            else:
+                connection.commit()
+    finally:
+        connection.close()
+    return result
+
+# A - 1. Print all universities
+def printalluniversities():
+    print('1')
+# A - 2. Print all students
+def printallstudents():
+    print('2')
+# B - 3. Insert a new university    
+def insertanewuniversity():
+    print('3')
+# B - 4. Remove a university
+def removeauniversity():
+    print('4')
+
+# C - 5. Insert a new student   
+def insertanewstudent():
+    print('5')
+# C - 6. Remove a student
+def removeastudent():
+    print('6')
+
+# D - 7. Make a application
+def makeaapplication():
+    pass
+
+#E - 8. Print all students who applied for a university
+def printallstudentsappliedforauniversity():
+    pass
+
+#F - 9. Print all universities a students applied for
+def printalluniversitiesastudentsappliedfor():
+    pass
+
+#G - 10. Print expected successful applicants of a university
+def printexpectedsuccessfulapplicantsofauniversity():
+    pass
+
+#H - 11. Print universities expected to accept a student
+def printuniversitiesexpectedtoacceptastudent():
+    pass
+
+#J - 13. Reset database
+def resetdatabase():
+    pass
+
 menu_num = 0
 menu_selection={
     1:printalluniversities,
@@ -79,71 +147,3 @@ def main():
 
 main()        
         
-
-def querytodatabase(sql,querytype, *args):
-    import pymysql.cursors
-    connection = pymysql.connect(
-        host = 'ds1.snu.ac.kr',
-        user = 'ds3_4',
-        password = '1q2w3e4r5t!',
-        db = 'ds3_4_project',
-        charset = 'utf8',
-        cursorclass = pymysql.cursors.DictCursor
-    )
-    result = None
-    try:  
-        with connection.cursor() as cursor:            
-            cursor.execute(sql,args)
-            #print 구문
-            if querytype == 'query':
-                result = cursor.fetchall()                
-            #ddl 실행시(insert/remove 등)
-            else:
-                connection.commit()
-    finally:
-        connection.close()
-    return result
-
-# A - 1. Print all universities
-def printalluniversities():
-    pass
-# A - 2. Print all students
-def printallstudents():
-    pass
-# B - 3. Insert a new university    
-def insertanewuniversity():
-    pass
-# B - 4. Remove a university
-def removeauniversity():
-    pass
-
-# C - 5. Insert a new student   
-def insertanewstudent():
-    pass
-# C - 6. Remove a student
-def removeastudent():
-    pass
-
-# D - 7. Make a application
-def makeaapplication():
-    pass
-
-#E - 8. Print all students who applied for a university
-def printallstudentsappliedforauniversity():
-    pass
-
-#F - 9. Print all universities a students applied for
-def printalluniversitiesastudentsappliedfor():
-    pass
-
-#G - 10. Print expected successful applicants of a university
-def printexpectedsuccessfulapplicantsofauniversity():
-    pass
-
-#H - 11. Print universities expected to accept a student
-def printuniversitiesexpectedtoacceptastudent():
-    pass
-
-#J - 13. Reset database
-def resetdatabase():
-    pass
