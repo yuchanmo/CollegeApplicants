@@ -104,14 +104,16 @@ def printalluniversities():
 
     try:
         with connection.cursor() as cursor:
-            sql = 'select * from Schools'
+            sql = '''select school_id, school_name, capacity,school_district,min_score,adjust_ratio,count(Apply.student_id) as appled
+                        from Schools Natural left outer join Apply
+                        group by school_id'''
             cursor.execute(sql)
             result = cursor.fetchall()
     finally:
         connection.close()
      
     for row in result:
-        print(str(row['school_id']) + '\t'+row['school_name'] + '\t'+str(row['capacity']) + '\t\t'+row['school_district'] + '\t'+str(row['min_score']) + '\t'+str(row['adjust_ratio']) )
+        print(str(row['school_id']) + '\t'+row['school_name'] + '\t'+str(row['capacity']) + '\t\t'+row['school_district'] + '\t'+str(row['min_score']) + '\t'+str(row['adjust_ratio']) + '\t'+ str(row['appled']) )
     print(tail)
 
 # A - 2. Print all students
