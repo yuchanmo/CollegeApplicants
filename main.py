@@ -264,7 +264,10 @@ def printexpectedsuccessfulapplicantsofauniversity():
 
 #H - 11. Print universities expected to accept a student
 def printuniversitiesexpectedtoacceptastudent():
-    pass
+    x = '(select school_id, school_name, student_id, student_name, test_score, capacity,  min_score,school_grades, (test_score+school_grades*adjust_ratio) as total_score from Students  natural join Apply natural join Schools where school_id = %s) as x'
+    y = 'select school_id, school_name, student_id, student_name, capacity,test_score, min_score, total_score,school_grades  from '+x+' where total_score>=min_score order by total_score desc,school_grades desc'
+    t = 'select count(student_id) as t from (' + y + ') as y group by total_score,school_grades order by total_score desc,school_grades desc ' 
+    z = 'select count(student_id) as count_s from (' + y + ') as y group by school_id' 
 
 #J - 13. Reset database
 def resetdatabase():
