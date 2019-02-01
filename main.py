@@ -146,7 +146,6 @@ def printallstudents():
 
 # B - 3. Insert a new university    
 def insertanewuniversity():
-    print('3')
     import pymysql
     p = True
     while p:
@@ -164,10 +163,8 @@ def insertanewuniversity():
             print('your value is wrong. retry')
         
 
-    print('2')
 # B - 4. Remove a university
 def removeauniversity():
-    print('4')
     import pymysql
     p = True
     while p:
@@ -189,7 +186,6 @@ def removeastudent():
 
 # D - 7. Make a application
 def makeaapplication():
-    print('7')
     import pymysql
     temp=[]
     temp.append(input('student_id: '))
@@ -202,7 +198,6 @@ def makeaapplication():
 
 #E - 8. Print all students who applied for a university
 def printallstudentsappliedforauniversity():
-    print('8')
     import pymysql
     temp=''
     temp=input('school_id: ')
