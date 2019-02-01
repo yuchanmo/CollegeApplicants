@@ -154,26 +154,6 @@ def printallstudents():
 
 
 # B - 3. Insert a new university    
-<<<<<<< HEAD
-def insertanewuniversity():
-    print('3')
-    import pymysql
-    p = True
-    while p:
-        try:
-            temp=[]
-            temp.append(input('University name: '))
-            temp.append(input('University capacity: '))
-            temp.append(input('University group: ').upper())
-            temp.append(input('Cutline score: '))
-            temp.append(input('Weight of high school records: '))
-            querytodatabase('insert into Schools(school_name,capacity,school_district,min_score,adjust_ratio) values(%s,%s,%s,%s,%s)',1,*temp)
-            print('A university is successfully inserted.')
-            p = False
-        except pymysql.err.InternalError:
-            print('your value is wrong. retry')
-        
-=======
 def insertanewuniversity():    
     try:
         temp=[]
@@ -187,7 +167,6 @@ def insertanewuniversity():
         p = False
     except pymysql.err.InternalError:
         print('your value is wrong. retry')        
->>>>>>> 9193c8df485c7d460cdfd39a4672804d010c25c0
 
 # B - 4. Remove a university
 def removeauniversity():    
@@ -216,7 +195,7 @@ def insertanewstudent():
 # C - 6. Remove a student
 def removeastudent():
     try:
-        student_id = inputwithpredicate('Student ID : ')
+        student_id = inputwithpredicate('Student ID : ',0)
         querytodatabase('delete from Students where student_id = %s',1,*[student_id])   
         print('A Student is successfully deleted.') 
     except pymysql.err.InternalError:
@@ -224,17 +203,15 @@ def removeastudent():
 
 
 # D - 7. Make a application
-def makeaapplication():
-    import pymysql
-    for i in range(1,50):
-        temp=[i,1]
-        # temp.append(input('student_id: '))
-        # temp.append(input('school_id: '))
-        try:
-            querytodatabase('insert into Apply select %s,school_id,school_district from Schools where school_id=%s  ',1,*temp)
-            print('Successfully made an application')
-        except pymysql.err.IntegrityError:
-            print('You already aplly same school_district.')
+def makeaapplication():      
+    try:
+        temp=[]
+        temp.append(inputwithpredicate('Student ID : ',0))
+        temp.append(inputwithpredicate('School ID : ',0))
+        querytodatabase('insert into Apply select %s,school_id,school_district from Schools where school_id=%s  ',1,*temp)
+        print('Successfully made an application')
+    except pymysql.err.IntegrityError:
+        print('You already aplly same school_district.')
 
 #E - 8. Print all students who applied for a university
 def printallstudentsappliedforauniversity():
