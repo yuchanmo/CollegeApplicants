@@ -154,7 +154,7 @@ def insertanewuniversity():
             temp=[]
             temp.append(input('University name: '))
             temp.append(input('University capacity: '))
-            temp.append(input('University group: '))
+            temp.append(input('University group: ').upper())
             temp.append(input('Cutline score: '))
             temp.append(input('Weight of high school records: '))
             querytodatabase('insert into Schools(school_name,capacity,school_district,min_score,adjust_ratio) values(%s,%s,%s,%s,%s)',1,*temp)
@@ -233,9 +233,14 @@ def printexpectedsuccessfulapplicantsofauniversity():
     
     temp=[]
     temp.append(input('school_id: '))
-    result = querytodatabase('select school_id, school_name, student_id, student_name, capacity, round(capacity*1.1,0) as add_capa, min_score, (test_score+school_grades*adjust_ratio) as total_score from Students  natural join Apply natural join Schools where school_id = %s',0,*temp)
+    x = '(select school_id, school_name, student_id, student_name, capacity, round(capacity*1.1,0) as add_capa, min_score,school_grades, (test_score+school_grades*adjust_ratio) as total_score from Students  natural join Apply natural join Schools where school_id = %s) as x'
+    y = 'select school_id, school_name, student_id, student_name, capacity, add_capa, min_score, total_score,school_grades as count_s from '+x+' where total_score>=min_score order by total_score desc,school_grades desc'
+    z = 'select count(student_id) as count_s from (' + y + ') as y group by school_id' 
+    result = querytodatabase(y,0,*temp)
+    count= querytodatabase(z,0,*temp)
     if result:
             print(result)
+            print(count)
     else:
         print('Your value is wrong.')
 
