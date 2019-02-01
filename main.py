@@ -203,7 +203,10 @@ def printallstudentsappliedforauniversity():
     temp=input('school_id: ')
     result = querytodatabase('select student_id, student_name, test_score,school_grades from Schools natural join Apply natural join Students where school_id =%s',0,temp)
     if result:
-        print(result)
+        print(students_head)   
+        for row in result:
+            print(str(row['student_id']) + '\t'+row['student_name'] + '\t\t'+str(row['test_score']) + '\t\t'+str(row['school_grades'])) 
+        print(tail)                
     else:
         print('your value is wrong.')
 
