@@ -233,16 +233,58 @@ def printexpectedsuccessfulapplicantsofauniversity():
     
     temp=[]
     temp.append(input('school_id: '))
-    x = '(select school_id, school_name, student_id, student_name, capacity, round(capacity*1.1,0) as add_capa, min_score,school_grades, (test_score+school_grades*adjust_ratio) as total_score from Students  natural join Apply natural join Schools where school_id = %s) as x'
-    y = 'select school_id, school_name, student_id, student_name, capacity, add_capa, min_score, total_score,school_grades as count_s from '+x+' where total_score>=min_score order by total_score desc,school_grades desc'
+    x = '(select school_id, school_name, student_id, student_name, test_score, capacity,  min_score,school_grades, (test_score+school_grades*adjust_ratio) as total_score from Students  natural join Apply natural join Schools where school_id = %s) as x'
+    y = 'select school_id, school_name, student_id, student_name, capacity,test_score, min_score, total_score,school_grades  from '+x+' where total_score>=min_score order by total_score desc,school_grades desc'
+    t = 'select count(student_id) as t from (' + y + ') as y group by total_score,school_grades order by total_score desc,school_grades desc ' 
     z = 'select count(student_id) as count_s from (' + y + ') as y group by school_id' 
     result = querytodatabase(y,0,*temp)
     count= querytodatabase(z,0,*temp)
+    t1= querytodatabase(t,0,*temp)
     if result:
-            print(result)
-            print(count)
-    else:
-        print('Your value is wrong.')
+        test=[]
+        for x in t1:
+            test.append(x['t'])
+        
+        if result[0]['capacity']>=count[0]['count_s']:
+            for i in result:
+                print(i['student_id'],i['student_name'],i['school_grades'],i['test_score'])
+        else:  
+            sum=0
+            temp=[]
+            for i in test:
+                for j in range(i):
+                    
+                    if sum<=result[0]['capacity']*1.1:  
+                        temp.append((result[j]['student_id'],result[j]['student_name'],result[j]['school_grades'],result[j]['test_score']))
+                        sum += test[j]
+                    else:
+                        break
+
+            print(set(temp))
+            
+# sum=0
+# temp=[]
+# while sum<=10:
+#     for i in test:
+#         for j in range(i):
+#             print(sum)
+#             print(t[j])
+#             temp.append(t[j])
+#             print(temp)            
+#             print(sum)
+#         sum+=i
+# print(temp)
+                    
+
+
+    #     for i in result:
+    #         if i['capacity']>=count[0]['count_s']:
+    #             print(i['student_id'],i['student_name'],i['school_grades'],i['test_score'])
+    #         else:
+    #             if i['capacity']>=count[0]['count_s']:
+    #                 print(i['student_id'],i['student_name'],i['school_grades'],i['test_score'])
+    # else:
+    #     print('Your value is wrong.')
 
 #H - 11. Print universities expected to accept a student
 def printuniversitiesexpectedtoacceptastudent():
