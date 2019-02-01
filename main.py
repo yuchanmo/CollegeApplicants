@@ -210,17 +210,17 @@ def printallstudentsappliedforauniversity():
     else:
         print('your value is wrong.')
 
-    
-
 #F - 9. Print all universities a students applied for
 def printalluniversitiesastudentsappliedfor():
-    print('9')
     
     temp=[]
     temp.append(input('student_id: '))
-    result = querytodatabase('select school_id, school_name, capacity,  school_district, min_score, adjust_ratio from Students  natural join Apply natural join Schools where student_id = %s',0,*temp)
+    result = querytodatabase('select school_id, school_name, capacity,  school_district, min_score, adjust_ratio,count(Apply.student_id) as appled from Students  natural join Apply natural join Schools where student_id = %s group by school_id ',0,*temp)
     if result:
-        print(result)
+        print(scholls_head)
+        for row in result:
+            print(str(row['school_id']) + '\t'+row['school_name'] + '\t'+str(row['capacity']) + '\t\t'+row['school_district'] + '\t'+str(row['min_score']) + '\t'+str(row['adjust_ratio']) + '\t'+ str(row['appled']) )
+        print(tail)
     else:
         print('your value is wrong.')
 
