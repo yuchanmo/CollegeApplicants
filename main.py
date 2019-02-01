@@ -295,16 +295,16 @@ def printuniversitiesexpectedtoacceptastudent():
     result2 = querytodatabase(y,0,*temp)
     
     student = (result2[0]['student_id'],result2[0]['student_name'],result2[0]['school_grades'],result2[0]['test_score'])
-    print(student)
+    # print(student)
 
     schools=[]
     schools_list=[]
     for i in result:
         schools.append(i['school_id'])
-    print (schools)
+    # print (schools)
     for j in schools:
         schools_list.append(getpassstudentlist([j]))
-    print(schools_list)
+    # print(schools_list)
     for k in range(len(schools_list)):
         if student in schools_list[k]:
             print(querytodatabase(z,0,schools[k]))
