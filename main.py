@@ -286,6 +286,7 @@ def main():
         if menu_num in menu_selection.keys():
             menu_selection[menu_num]()
         elif menu_num == 12:
+            print('Bye!')
             break
         else:
             print('잘못된 번호 입력하였습니다')
