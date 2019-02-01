@@ -52,12 +52,12 @@
 
 scholls_head ='''
 ----------------------------------------------------------------------
-id      name        capacity        group   cutline     weight  appled
+id\tname\t\tcapacity\tgroup\tcutline\tweight\tappled
 ----------------------------------------------------------------------'''
 
 students_head ='''
 ----------------------------------------------------------------------
-id      name        csat_score      scholl_score
+id\tname\t\tcsat_score\tscholl_score
 ----------------------------------------------------------------------'''
 
 tail='''
@@ -91,15 +91,58 @@ def querytodatabase(sql,querytype=0, *args):
 
 # A - 1. Print all universities
 def printalluniversities():
-    print(scholls_head)
-    print(querytodatabase('select * from Students limit 10 where student_name like %s',0,'A%'))
+    print(scholls_head)   
+    import pymysql.cursors
+    connection = pymysql.connect(
+        host = 'ds1.snu.ac.kr',
+        user = 'ds3_4',
+        password = '1q2w3e4r5t!',
+        db = 'ds3_4_project',
+        charset = 'utf8',
+        cursorclass = pymysql.cursors.DictCursor
+    )
+    result = None
+
+    try:
+        with connection.cursor() as cursor:
+            sql = '''select school_id, school_name, capacity,school_district,min_score,adjust_ratio,count(Apply.student_id) as appled
+                        from Schools Natural left outer join Apply
+                        group by school_id'''
+            cursor.execute(sql)
+            result = cursor.fetchall()
+    finally:
+        connection.close()
+     
+    for row in result:
+        print(str(row['school_id']) + '\t'+row['school_name'] + '\t'+str(row['capacity']) + '\t\t'+row['school_district'] + '\t'+str(row['min_score']) + '\t'+str(row['adjust_ratio']) + '\t'+ str(row['appled']) )
     print(tail)
 
 # A - 2. Print all students
 def printallstudents():
-    print(students_head)
-    print(querytodatabase('select * from Students limit 10 where student_name like %s',0,'A%'))
+    print(students_head)   
+    import pymysql.cursors
+    connection = pymysql.connect(
+        host = 'ds1.snu.ac.kr',
+        user = 'ds3_4',
+        password = '1q2w3e4r5t!',
+        db = 'ds3_4_project',
+        charset = 'utf8',
+        cursorclass = pymysql.cursors.DictCursor
+    )
+    result = None
+
+    try:
+        with connection.cursor() as cursor:
+            sql = 'select * from Students'
+            cursor.execute(sql)
+            result = cursor.fetchall()
+    finally:
+        connection.close()
+     
+    for row in result:
+        print(str(row['student_id']) + '\t'+row['student_name'] + '\t\t'+str(row['test_score']) + '\t\t'+str(row['school_grades'])) 
     print(tail)
+
 
 # B - 3. Insert a new university    
 def insertanewuniversity():
@@ -221,7 +264,7 @@ menu_selection={
 }
 
 menu_list ='''
-============================================================
+======================================================================
 1. print all universities
 2. print all students
 3. insert a new university
@@ -235,7 +278,7 @@ menu_list ='''
 11. print universities expected to accept a student
 12. exit
 13. reset database
-============================================================'''
+======================================================================'''
 
 
 def main():
