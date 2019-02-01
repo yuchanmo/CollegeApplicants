@@ -128,9 +128,7 @@ def inputwithpredicate(comment,dtype):
         else:
             print(err_msg)
 
-        
-
-        
+         
 
 # A - 1. Print all universities
 #querytodatabase('SELECT * FROM ds3_4_project.Students where student_name like %s and test_score > %s',0,('A%',30))
@@ -156,55 +154,56 @@ def printallstudents():
 
 
 # B - 3. Insert a new university    
-def insertanewuniversity():
-    print('3')
-    
-    p = True
-    while p:
-        try:
-            temp=[]
-            temp.append(inputwithpredicate('University name: ',1))
-            temp.append(inputwithpredicate('University capacity: ',0))
-            temp.append(inputwithpredicate('University group: ',1))
-            temp.append(inputwithpredicate('Cutline score: ',0))
-            temp.append(inputwithpredicate('Weight of high school records: ',0))
-            querytodatabase('insert into Schools(school_name,capacity,school_district,min_score,adjust_ratio) values(%s,%s,%s,%s,%s)',1,*temp)
-            print('A university is successfully inserted.')
-            p = False
-        except pymysql.err.InternalError:
-            print('your value is wrong. retry')        
+def insertanewuniversity():    
+    try:
+        temp=[]
+        temp.append(inputwithpredicate('University name: ',1))
+        temp.append(inputwithpredicate('University capacity: ',0))
+        temp.append(inputwithpredicate('University group: ',1))
+        temp.append(inputwithpredicate('Cutline score: ',0))
+        temp.append(inputwithpredicate('Weight of high school records: ',0))
+        querytodatabase('insert into Schools(school_name,capacity,school_district,min_score,adjust_ratio) values(%s,%s,%s,%s,%s)',1,*temp)
+        print('A university is successfully inserted.')
+        p = False
+    except pymysql.err.InternalError:
+        print('your value is wrong. retry')        
 
-    print('2')
 # B - 4. Remove a university
-def removeauniversity():
-    print('4')
-    import pymysql
-    p = True
-    while p:
-        try:
-            temp=''
-            temp=input('school_id: ')
-            querytodatabase('delete from Schools where school_id = %s',1,temp)
-            print('A university is successfully deleted.')
-            p = False
-        except pymysql.err.InternalError:
-            print('your value is wrong. retry')
+def removeauniversity():    
+    try:
+        temp=''
+        temp=inputwithpredicate('school_id: ',0)
+        querytodatabase('delete from Schools where school_id = %s',1,temp)
+        print('A university is successfully deleted.')    
+    except pymysql.err.InternalError:
+        print('your value is wrong. retry')
 
 # C - 5. Insert a new student   
-def insertanewstudent():    
-    querytodatabase('insert into Students(student_name,test_score,school_grades) values (%s,%s,%s);',1,*('ana',3,3))
-
-insertanewstudent()
+def insertanewstudent():
+    try:
+        temp=[]
+        temp.append(inputwithpredicate('Student name: ',1))
+        temp.append(inputwithpredicate('Test Score: ',0))
+        temp.append(inputwithpredicate('School Grade: ',0))        
+        querytodatabase('insert into Students(student_name,test_score,school_grades) values (%s,%s,%s);',1,*temp)
+        print('A Student is successfully inserted.')
+        p = False
+    except pymysql.err.InternalError:
+        print('your value is wrong. retry')          
+    
 
 # C - 6. Remove a student
 def removeastudent():
-    student_name = input('Student Name : ')
-    test_score = float(input('Test Score : '))
+    try:
+        student_id = inputwithpredicate('Student ID : ')
+        querytodatabase('delete from Students where student_id = %s',1,*[student_id])   
+        print('A Student is successfully deleted.') 
+    except pymysql.err.InternalError:
+        print('your value is wrong. retry')          
 
 
 # D - 7. Make a application
 def makeaapplication():
-    print('7')
     import pymysql
     for i in range(1,50):
         temp=[i,1]
@@ -218,27 +217,29 @@ def makeaapplication():
 
 #E - 8. Print all students who applied for a university
 def printallstudentsappliedforauniversity():
-    print('8')
     import pymysql
     temp=''
     temp=input('school_id: ')
     result = querytodatabase('select student_id, student_name, test_score,school_grades from Schools natural join Apply natural join Students where school_id =%s',0,temp)
     if result:
-        print(result)
+        print(students_head)   
+        for row in result:
+            print(str(row['student_id']) + '\t'+row['student_name'] + '\t\t'+str(row['test_score']) + '\t\t'+str(row['school_grades'])) 
+        print(tail)                
     else:
         print('your value is wrong.')
 
-    
-
 #F - 9. Print all universities a students applied for
 def printalluniversitiesastudentsappliedfor():
-    print('9')
     
     temp=[]
     temp.append(input('student_id: '))
-    result = querytodatabase('select school_id, school_name, capacity,  school_district, min_score, adjust_ratio from Students  natural join Apply natural join Schools where student_id = %s',0,*temp)
+    result = querytodatabase('select school_id, school_name, capacity,  school_district, min_score, adjust_ratio,count(Apply.student_id) as appled from Students  natural join Apply natural join Schools where student_id = %s group by school_id ',0,*temp)
     if result:
-        print(result)
+        print(scholls_head)
+        for row in result:
+            print(str(row['school_id']) + '\t'+row['school_name'] + '\t'+str(row['capacity']) + '\t\t'+row['school_district'] + '\t'+str(row['min_score']) + '\t'+str(row['adjust_ratio']) + '\t'+ str(row['appled']) )
+        print(tail)
     else:
         print('your value is wrong.')
 
@@ -288,6 +289,7 @@ def main():
         if menu_num in menu_selection.keys():
             menu_selection[menu_num]()
         elif menu_num == 12:
+            print('Bye!')
             break
         else:
             print('잘못된 번호 입력하였습니다')
