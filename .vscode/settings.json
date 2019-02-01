@@ -1,8 +1,4 @@
 {
-<<<<<<< HEAD
-    "python.pythonPath": "C:\\Users\\ds3\\Anaconda3\\python.exe",
+    "python.pythonPath": "C:\\Python\\Python36\\python.exe",
     "python.linting.pylintEnabled": true
-=======
-    "python.pythonPath": "C:\\Anaconda3\\python.exe"
->>>>>>> 7d7ad2c7968e328a9bc5b3dd7f12f620cbfd8ec8
 }
