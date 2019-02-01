@@ -53,6 +53,121 @@
 
 import pymysql
 
+
+ddlscripts = '''
+use ds3_4;|
+drop table if exists Apply cascade;|
+drop table if exists Schools cascade;|
+drop table if exists Students cascade;|
+DROP PROCEDURE IF EXISTS check_school;|
+DROP PROCEDURE IF EXISTS check_student;|
+
+CREATE TABLE `Schools` (
+  `school_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `school_name` varchar(200) NOT NULL,
+  `capacity` int(11) NOT NULL,
+  `school_district` char(2) NOT NULL,
+  `min_score` int(10) unsigned NOT NULL,
+  `adjust_ratio` float unsigned NOT NULL,
+  PRIMARY KEY (`school_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=166 DEFAULT CHARSET=utf8;|
+
+CREATE TABLE `Students` (
+  `student_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `student_name` varchar(200) NOT NULL,
+  `test_score` int(10) unsigned NOT NULL,
+  `school_grades` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`student_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6095 DEFAULT CHARSET=utf8;|
+
+CREATE TABLE `Apply` (
+  `student_id` int(10) unsigned NOT NULL,
+  `school_id` int(10) unsigned NOT NULL,
+  `school_district` char(2) DEFAULT NULL,
+  PRIMARY KEY (`student_id`,`school_id`),
+  UNIQUE KEY `uk_student_id_school_district` (`student_id`,`school_district`),  
+  CONSTRAINT `fk_apply_school` FOREIGN KEY (`school_id`) REFERENCES `Schools` (`school_id`),
+  CONSTRAINT `fk_apply_student` FOREIGN KEY (`student_id`) REFERENCES `Students` (`student_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;|
+
+DELIMITER $$
+create procedure check_school
+(in pname nvarchar(200),
+ in pcapacity int,
+ in pdistrict char(2),
+ in pminscore int,
+ in padjustratio float
+)
+begin
+    if pcapacity < 1 then
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Please enter value over 0 for Capacity';
+    end if;
+
+    if pdistrict not in ('A','B','C') then
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Please enter only A or B or C for school district';
+    end if;
+end$$
+
+DELIMITER ;|
+
+DELIMITER $$
+CREATE TRIGGER `check_school_before_insert` BEFORE INSERT ON `Schools`
+FOR EACH ROW
+BEGIN
+    CALL check_school(new.school_name,new.capacity,new.school_district,new.min_score,new.adjust_ratio);
+END$$   
+DELIMITER ; |
+
+DELIMITER $$
+CREATE TRIGGER `check_school_before_update` BEFORE UPDATE ON `Schools`
+FOR EACH ROW
+BEGIN
+    CALL check_school(new.school_name,new.capacity,new.school_district,new.min_score,new.adjust_ratio);
+END$$   
+DELIMITER ;|
+
+DELIMITER $$
+create procedure check_student
+(
+    in pname nvarchar(200),
+    in ptestscore int,
+    in pschoolgrade int 
+)
+begin
+    if ptestscore < 0 or ptestscore > 400 then
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Please enter value between 0 and 400 for TestScore';
+    end if;
+
+    if pschoolgrade < 0 or pschoolgrade > 100 then
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Please enter value between 0 and 100 for SchoolGrade';
+    end if;
+end$$
+DELIMITER ;|
+
+DELIMITER $$
+CREATE TRIGGER `check_student_before_insert` BEFORE INSERT ON `Students`
+FOR EACH ROW
+BEGIN
+    CALL check_student(new.student_name,new.test_score,new.school_grades);
+END$$   
+DELIMITER ;|
+
+DELIMITER $$
+CREATE TRIGGER `check_student_before_update` BEFORE UPDATE ON `Students`
+FOR EACH ROW
+BEGIN
+    CALL check_student(new.student_name,new.test_score,new.school_grades);
+END$$   
+DELIMITER;
+'''
+
+
+
+
 #string format
 scholls_head ='''
 ----------------------------------------------------------------------
@@ -107,6 +222,9 @@ def querytodatabase(sql,querytype=0, *args):
             #ddl 실행시(insert/remove 등)
             else:
                 connection.commit()
+    except Exception as e:
+        raise Exception
+    
     finally:
         connection.close()
     return result
@@ -120,13 +238,16 @@ def inputwithpredicate(comment,dtype):
     }
     p = True
     while p:
-        res = eval(input(comment)) if dtype == 0 else input(comment)
-        wanted_type = typechecker[dtype]['type']
-        err_msg = typechecker[dtype]['errmsg']
-        if type(res) in wanted_type:            
-            return res
-        else:
-            print(err_msg)
+        try:
+            res = eval(input(comment)) if dtype == 0 else input(comment)
+            wanted_type = typechecker[dtype]['type']            
+            if type(res) in wanted_type:            
+                return res            
+            else:
+                print(typechecker[dtype]['errmsg'])    
+        except:
+            print(typechecker[dtype]['errmsg'])
+
 
          
 
@@ -211,6 +332,8 @@ def makeaapplication():
         print('Successfully made an application')
     except pymysql.err.IntegrityError:
         print('You already aplly same school_district.')
+    except Exception as e:
+        print(str(e))
 
 #E - 8. Print all students who applied for a university
 def printallstudentsappliedforauniversity():
@@ -286,8 +409,16 @@ def printuniversitiesexpectedtoacceptastudent():
     result = querytodatabase(x,0,*temp)
     
 #J - 13. Reset database
-def resetdatabase():
-    pass
+def resetdatabase():   
+    try:
+        querylist = ddlscripts.replace('\n','').split('|')
+        for q in querylist:
+            querytodatabase(q,1)
+        print('Done to reset database. Please enter new data.')    
+    except Exception:
+        print('Error occured while trying to reset database.')
+
+
 
 menu_num = 0
 menu_selection={
