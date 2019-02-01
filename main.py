@@ -147,13 +147,16 @@ def removeastudent():
 # D - 7. Make a application
 def makeaapplication():
     print('7')
+    import pymysql
     temp=[]
     temp.append(input('student_id: '))
     temp.append(input('school_id: '))
-   
-    querytodatabase('insert into Apply select %s,school_id,school_district from Schools where school_id=%s  ',1,*temp)
-    print('Successfully made an application')
-    
+    try:
+        querytodatabase('insert into Apply select %s,school_id,school_district from Schools where school_id=%s  ',1,*temp)
+        print('Successfully made an application')
+    except pymysql.err.IntegrityError:
+        print('You already aplly same school_district.')
+
 #E - 8. Print all students who applied for a university
 def printallstudentsappliedforauniversity():
     print('8')
@@ -182,7 +185,16 @@ def printalluniversitiesastudentsappliedfor():
 
 #G - 10. Print expected successful applicants of a university
 def printexpectedsuccessfulapplicantsofauniversity():
-    pass
+    print('10')
+    import pandas as pd
+    
+    temp=[]
+    temp.append(input('school_id: '))
+    result = querytodatabase('select school_id, school_name, student_id, student_name, capacity, round(capacity*1.1,0) as add_capa, min_score, (test_score+school_grades*adjust_ratio) as total_score from Students  natural join Apply natural join Schools where school_id = %s',0,*temp)
+    if result:
+            print(result)
+    else:
+        print('your value is wrong.')
 
 #H - 11. Print universities expected to accept a student
 def printuniversitiesexpectedtoacceptastudent():
