@@ -50,6 +50,10 @@
 # I - 12. Exit
 # J - 13. Reset database
 
+
+import pymysql
+
+#string format
 scholls_head ='''
 ----------------------------------------------------------------------
 id\tname\t\tcapacity\tgroup\tcutline\tweight\tappled
@@ -63,7 +67,25 @@ id\tname\t\tcsat_score\tscholl_score
 tail='''
 ----------------------------------------------------------------------'''
 
+menu_list ='''
+======================================================================
+1. print all universities
+2. print all students
+3. insert a new university
+4. remove a university
+5. insert a new student
+6. remove a student
+7. make an application
+8. print all students who applied for a university
+9. print all universities a student applied for
+10. print expected successful applicants of a university
+11. print universities expected to accept a student
+12. exit
+13. reset database
+======================================================================'''
 
+
+#db connection method
 def querytodatabase(sql,querytype=0, *args):
     import pymysql.cursors
     connection = pymysql.connect(
@@ -91,32 +113,34 @@ def querytodatabase(sql,querytype=0, *args):
 
 
 
+def inputwithpredicate(comment,dtype):
+    typechecker = {
+        0 : {'type' : [int,float],'errmsg' : 'Please enter integer/float value'},        
+        1 : {'type' : [str], 'errmsg' : 'Please enter string value'}
+    }
+    p = True
+    while p:
+        res = eval(input(comment)) if dtype == 0 else input(comment)
+        wanted_type = typechecker[dtype]['type']
+        err_msg = typechecker[dtype]['errmsg']
+        if type(res) in wanted_type:            
+            return res
+        else:
+            print(err_msg)
+
+        
+
+        
+
 # A - 1. Print all universities
 #querytodatabase('SELECT * FROM ds3_4_project.Students where student_name like %s and test_score > %s',0,('A%',30))
 #querytodatabase(query문,0,(튜플로 조건))
 def printalluniversities():
-    print(scholls_head)   
-    import pymysql.cursors
-    connection = pymysql.connect(
-        host = 'ds1.snu.ac.kr',
-        user = 'ds3_4',
-        password = '1q2w3e4r5t!',
-        db = 'ds3_4_project',
-        charset = 'utf8',
-        cursorclass = pymysql.cursors.DictCursor
-    )
-    result = None
-
-    try:
-        with connection.cursor() as cursor:
-            sql = '''select school_id, school_name, capacity,school_district,min_score,adjust_ratio,count(Apply.student_id) as appled
+    print(scholls_head)
+    sql = '''select school_id, school_name, capacity,school_district,min_score,adjust_ratio,count(Apply.student_id) as appled
                         from Schools Natural left outer join Apply
-                        group by school_id'''
-            cursor.execute(sql)
-            result = cursor.fetchall()
-    finally:
-        connection.close()
-     
+                        group by school_id''' 
+    result = querytodatabase(sql,0)  
     for row in result:
         print(str(row['school_id']) + '\t'+row['school_name'] + '\t'+str(row['capacity']) + '\t\t'+row['school_district'] + '\t'+str(row['min_score']) + '\t'+str(row['adjust_ratio']) + '\t'+ str(row['appled']) )
     print(tail)
@@ -124,25 +148,8 @@ def printalluniversities():
 # A - 2. Print all students
 def printallstudents():
     print(students_head)   
-    import pymysql.cursors
-    connection = pymysql.connect(
-        host = 'ds1.snu.ac.kr',
-        user = 'ds3_4',
-        password = '1q2w3e4r5t!',
-        db = 'ds3_4_project',
-        charset = 'utf8',
-        cursorclass = pymysql.cursors.DictCursor
-    )
-    result = None
-
-    try:
-        with connection.cursor() as cursor:
-            sql = 'select * from Students'
-            cursor.execute(sql)
-            result = cursor.fetchall()
-    finally:
-        connection.close()
-     
+    sql = 'select * from Students'
+    result = querytodatabase(sql,0)      
     for row in result:
         print(str(row['student_id']) + '\t'+row['student_name'] + '\t\t'+str(row['test_score']) + '\t\t'+str(row['school_grades'])) 
     print(tail)
@@ -151,22 +158,21 @@ def printallstudents():
 # B - 3. Insert a new university    
 def insertanewuniversity():
     print('3')
-    import pymysql
+    
     p = True
     while p:
         try:
             temp=[]
-            temp.append(input('University name: '))
-            temp.append(input('University capacity: '))
-            temp.append(input('University group: '))
-            temp.append(input('Cutline score: '))
-            temp.append(input('Weight of high school records: '))
+            temp.append(inputwithpredicate('University name: ',1))
+            temp.append(inputwithpredicate('University capacity: ',0))
+            temp.append(inputwithpredicate('University group: ',1))
+            temp.append(inputwithpredicate('Cutline score: ',0))
+            temp.append(inputwithpredicate('Weight of high school records: ',0))
             querytodatabase('insert into Schools(school_name,capacity,school_district,min_score,adjust_ratio) values(%s,%s,%s,%s,%s)',1,*temp)
             print('A university is successfully inserted.')
             p = False
         except pymysql.err.InternalError:
-            print('your value is wrong. retry')
-        
+            print('your value is wrong. retry')        
 
     print('2')
 # B - 4. Remove a university
@@ -200,14 +206,15 @@ def removeastudent():
 def makeaapplication():
     print('7')
     import pymysql
-    temp=[]
-    temp.append(input('student_id: '))
-    temp.append(input('school_id: '))
-    try:
-        querytodatabase('insert into Apply select %s,school_id,school_district from Schools where school_id=%s  ',1,*temp)
-        print('Successfully made an application')
-    except pymysql.err.IntegrityError:
-        print('You already aplly same school_district.')
+    for i in range(1,50):
+        temp=[i,1]
+        # temp.append(input('student_id: '))
+        # temp.append(input('school_id: '))
+        try:
+            querytodatabase('insert into Apply select %s,school_id,school_district from Schools where school_id=%s  ',1,*temp)
+            print('Successfully made an application')
+        except pymysql.err.IntegrityError:
+            print('You already aplly same school_district.')
 
 #E - 8. Print all students who applied for a university
 def printallstudentsappliedforauniversity():
@@ -272,22 +279,6 @@ menu_selection={
     13:resetdatabase
 }
 
-menu_list ='''
-======================================================================
-1. print all universities
-2. print all students
-3. insert a new university
-4. remove a university
-5. insert a new student
-6. remove a student
-7. make an application
-8. print all students who applied for a university
-9. print all universities a student applied for
-10. print expected successful applicants of a university
-11. print universities expected to accept a student
-12. exit
-13. reset database
-======================================================================'''
 
 
 def main():
@@ -301,5 +292,6 @@ def main():
         else:
             print('잘못된 번호 입력하였습니다')
 
-main()        
+if __name__ == '__main__':
+    main()        
         
