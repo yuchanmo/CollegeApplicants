@@ -152,7 +152,6 @@ def printallstudents():
         print(str(row['student_id']) + '\t'+row['student_name'] + '\t\t'+str(row['test_score']) + '\t\t'+str(row['school_grades'])) 
     print(tail)
 
-
 # B - 3. Insert a new university    
 def insertanewuniversity():    
     try:
@@ -228,8 +227,7 @@ def printallstudentsappliedforauniversity():
         print('your value is wrong.')
 
 #F - 9. Print all universities a students applied for
-def printalluniversitiesastudentsappliedfor():
-    
+def printalluniversitiesastudentsappliedfor():    
     temp=[]
     temp.append(input('student_id: '))
     result = querytodatabase('select school_id, school_name, capacity,  school_district, min_score, adjust_ratio,count(Apply.student_id) as appled from Students  natural join Apply natural join Schools where student_id = %s group by school_id ',0,*temp)
@@ -268,7 +266,11 @@ def getpassstudentlist(temp):
                         sum += test[j]
                     else:
                         break
-            print(set(temp))
+
+            print(students_head)   
+            for row in sorted(list(set(temp))):
+                print(str(row[0]) + '\t'+row[1] + '\t\t'+str(row[2]) + '\t\t'+str(row[3])) 
+            print(tail) 
 
 
 #G - 10. Print expected successful applicants of a university
