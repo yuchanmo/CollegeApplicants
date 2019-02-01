@@ -106,7 +106,7 @@ def querytodatabase(sql,querytype=0, *args):
 
             #ddl 실행시(insert/remove 등)
             else:
-                res = connection.commit()
+                connection.commit()
     finally:
         connection.close()
     return result
@@ -241,13 +241,8 @@ def printalluniversitiesastudentsappliedfor():
     else:
         print('your value is wrong.')
 
-#G - 10. Print expected successful applicants of a university
-def printexpectedsuccessfulapplicantsofauniversity():
-    print('10')
-    import pandas as pd
-    
-    temp=[]
-    temp.append(input('school_id: '))
+
+def getpassstudentlist(temp):       
     x = '(select school_id, school_name, student_id, student_name, test_score, capacity,  min_score,school_grades, (test_score+school_grades*adjust_ratio) as total_score from Students  natural join Apply natural join Schools where school_id = %s) as x'
     y = 'select school_id, school_name, student_id, student_name, capacity,test_score, min_score, total_score,school_grades  from '+x+' where total_score>=min_score order by total_score desc,school_grades desc'
     t = 'select count(student_id) as t from (' + y + ') as y group by total_score,school_grades order by total_score desc,school_grades desc ' 
@@ -259,7 +254,7 @@ def printexpectedsuccessfulapplicantsofauniversity():
         test=[]
         for x in t1:
             test.append(x['t'])
-        
+
         if result[0]['capacity']>=count[0]['count_s']:
             for i in result:
                 print(i['student_id'],i['student_name'],i['school_grades'],i['test_score'])
@@ -267,23 +262,27 @@ def printexpectedsuccessfulapplicantsofauniversity():
             sum=0
             temp=[]
             for i in test:
-                for j in range(i):
-                    
+                for j in range(i):                    
                     if sum<=result[0]['capacity']*1.1:  
                         temp.append((result[j]['student_id'],result[j]['student_name'],result[j]['school_grades'],result[j]['test_score']))
                         sum += test[j]
                     else:
                         break
-
             print(set(temp))
+
+
+#G - 10. Print expected successful applicants of a university
+def printexpectedsuccessfulapplicantsofauniversity(): 
+    temp=[]
+    temp.append(input('school_id: '))   
+    getpassstudentlist(temp)
+
 
 #H - 11. Print universities expected to accept a student
 def printuniversitiesexpectedtoacceptastudent():
-    x = '(select school_id, school_name, student_id, student_name, test_score, capacity,  min_score,school_grades, (test_score+school_grades*adjust_ratio) as total_score from Students  natural join Apply natural join Schools where school_id = %s) as x'
-    y = 'select school_id, school_name, student_id, student_name, capacity,test_score, min_score, total_score,school_grades  from '+x+' where total_score>=min_score order by total_score desc,school_grades desc'
-    t = 'select count(student_id) as t from (' + y + ') as y group by total_score,school_grades order by total_score desc,school_grades desc ' 
-    z = 'select count(student_id) as count_s from (' + y + ') as y group by school_id' 
-
+    x = 'select school_id, school_name, student_id, student_name, test_score, capacity,  min_score,school_grades, (test_score+school_grades*adjust_ratio) as total_score from Students  natural join Apply natural join Schools where student_id = %s'
+    result = querytodatabase(x,0,*temp)
+    
 #J - 13. Reset database
 def resetdatabase():
     pass
