@@ -152,7 +152,6 @@ def printallstudents():
         print(str(row['student_id']) + '\t'+row['student_name'] + '\t\t'+str(row['test_score']) + '\t\t'+str(row['school_grades'])) 
     print(tail)
 
-
 # B - 3. Insert a new university    
 def insertanewuniversity():    
     try:
@@ -275,7 +274,10 @@ def printexpectedsuccessfulapplicantsofauniversity():
                     else:
                         break
 
-            print(set(temp))
+            print(students_head)   
+            for row in sorted(list(set(temp))):
+                print(str(row[0]) + '\t'+row[1] + '\t\t'+str(row[2]) + '\t\t'+str(row[3])) 
+            print(tail) 
 
 #H - 11. Print universities expected to accept a student
 def printuniversitiesexpectedtoacceptastudent():
