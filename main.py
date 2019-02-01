@@ -194,7 +194,7 @@ def printexpectedsuccessfulapplicantsofauniversity():
     if result:
             print(result)
     else:
-        print('your value is wrong.')
+        print('Your value is wrong.')
 
 #H - 11. Print universities expected to accept a student
 def printuniversitiesexpectedtoacceptastudent():
