@@ -75,9 +75,13 @@ def querytodatabase(sql,querytype=0, *args):
         connection.close()
     return result
 
+
+
 # A - 1. Print all universities
+#querytodatabase('SELECT * FROM ds3_4_project.Students where student_name like %s and test_score > %s',0,('A%',30))
+#querytodatabase(query문,0,(튜플로 조건))
 def printalluniversities():
-    print(querytodatabase('select * from Students limit 10 where student_name like %s',0,'A%'))
+    print(querytodatabase('SELECT * FROM ds3_4_project.Students where student_name like %s',0,('A%',)))
 
 # A - 2. Print all students
 def printallstudents():
@@ -91,10 +95,15 @@ def removeauniversity():
 
 # C - 5. Insert a new student   
 def insertanewstudent():    
-    print('5')
+    querytodatabase('insert into Students(student_name,test_score,school_grades) values (%s,%s,%s);',1,*('ana',3,3))
+
+insertanewstudent()
+
 # C - 6. Remove a student
 def removeastudent():
-    print('6')
+    student_name = input('Student Name : ')
+    test_score = float(input('Test Score : '))
+
 
 # D - 7. Make a application
 def makeaapplication():
