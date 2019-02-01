@@ -261,30 +261,6 @@ def printexpectedsuccessfulapplicantsofauniversity():
                         break
 
             print(set(temp))
-            
-# sum=0
-# temp=[]
-# while sum<=10:
-#     for i in test:
-#         for j in range(i):
-#             print(sum)
-#             print(t[j])
-#             temp.append(t[j])
-#             print(temp)            
-#             print(sum)
-#         sum+=i
-# print(temp)
-                    
-
-
-    #     for i in result:
-    #         if i['capacity']>=count[0]['count_s']:
-    #             print(i['student_id'],i['student_name'],i['school_grades'],i['test_score'])
-    #         else:
-    #             if i['capacity']>=count[0]['count_s']:
-    #                 print(i['student_id'],i['student_name'],i['school_grades'],i['test_score'])
-    # else:
-    #     print('Your value is wrong.')
 
 #H - 11. Print universities expected to accept a student
 def printuniversitiesexpectedtoacceptastudent():
