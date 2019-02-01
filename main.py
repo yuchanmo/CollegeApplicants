@@ -50,6 +50,19 @@
 # I - 12. Exit
 # J - 13. Reset database
 
+scholls_head ='''
+----------------------------------------------------------------------
+id      name        capacity        group   cutline     weight  appled
+----------------------------------------------------------------------'''
+
+students_head ='''
+----------------------------------------------------------------------
+id      name        csat_score      scholl_score
+----------------------------------------------------------------------'''
+
+tail='''
+----------------------------------------------------------------------'''
+
 
 def querytodatabase(sql,querytype=0, *args):
     import pymysql.cursors
@@ -78,11 +91,16 @@ def querytodatabase(sql,querytype=0, *args):
 
 # A - 1. Print all universities
 def printalluniversities():
+    print(scholls_head)
     print(querytodatabase('select * from Students limit 10 where student_name like %s',0,'A%'))
+    print(tail)
 
 # A - 2. Print all students
 def printallstudents():
-    print('2')
+    print(students_head)
+    print(querytodatabase('select * from Students limit 10 where student_name like %s',0,'A%'))
+    print(tail)
+
 # B - 3. Insert a new university    
 def insertanewuniversity():
     print('3')
@@ -118,7 +136,7 @@ def removeauniversity():
             p = False
         except pymysql.err.InternalError:
             print('your value is wrong. retry')
-removeauniversity()
+
 # C - 5. Insert a new student   
 def insertanewstudent():    
     print('5')
@@ -128,15 +146,39 @@ def removeastudent():
 
 # D - 7. Make a application
 def makeaapplication():
-    pass
-
+    print('7')
+    temp=[]
+    temp.append(input('student_id: '))
+    temp.append(input('school_id: '))
+   
+    querytodatabase('insert into Apply select %s,school_id,school_district from Schools where school_id=%s  ',1,*temp)
+    print('Successfully made an application')
+    
 #E - 8. Print all students who applied for a university
 def printallstudentsappliedforauniversity():
-    pass
+    print('8')
+    import pymysql
+    temp=''
+    temp=input('school_id: ')
+    result = querytodatabase('select student_id, student_name, test_score,school_grades from Schools natural join Apply natural join Students where school_id =%s',0,temp)
+    if result:
+        print(result)
+    else:
+        print('your value is wrong.')
+
+    
 
 #F - 9. Print all universities a students applied for
 def printalluniversitiesastudentsappliedfor():
-    pass
+    print('9')
+    
+    temp=[]
+    temp.append(input('student_id: '))
+    result = querytodatabase('select school_id, school_name, capacity,  school_district, min_score, adjust_ratio from Students  natural join Apply natural join Schools where student_id = %s',0,*temp)
+    if result:
+        print(result)
+    else:
+        print('your value is wrong.')
 
 #G - 10. Print expected successful applicants of a university
 def printexpectedsuccessfulapplicantsofauniversity():
