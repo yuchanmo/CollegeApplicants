@@ -377,8 +377,10 @@ def getpassstudentlist(temp):
             test.append(x['t'])
 
         if result[0]['capacity']>=count[0]['count_s']:
+            temp=[]
             for i in result:
-                print(i['student_id'],i['student_name'],i['school_grades'],i['test_score'])
+                temp.append((i['student_id'],i['student_name'],i['school_grades'],i['test_score']))
+            return temp
         else:  
             sum=0
             temp=[]
@@ -389,25 +391,47 @@ def getpassstudentlist(temp):
                         sum += test[j]
                     else:
                         break
+            return temp
 
-            print(students_head)   
-            for row in sorted(list(set(temp))):
-                print(str(row[0]) + '\t'+row[1] + '\t\t'+str(row[2]) + '\t\t'+str(row[3])) 
-            print(tail) 
+            
 
 
 #G - 10. Print expected successful applicants of a university
 def printexpectedsuccessfulapplicantsofauniversity(): 
     temp=[]
     temp.append(input('school_id: '))   
-    getpassstudentlist(temp)
+    result=getpassstudentlist(temp)
 
+    print(students_head)   
+    for row in sorted(list(set(result))):
+        print(str(row[0]) + '\t'+row[1] + '\t\t'+str(row[2]) + '\t\t'+str(row[3])) 
+    print(tail) 
 
 #H - 11. Print universities expected to accept a student
 def printuniversitiesexpectedtoacceptastudent():
-    x = 'select school_id, school_name, student_id, student_name, test_score, capacity,  min_score,school_grades, (test_score+school_grades*adjust_ratio) as total_score from Students  natural join Apply natural join Schools where student_id = %s'
+    x = 'select school_id from Students  natural join Apply natural join Schools where student_id = %s'
+    y = 'select student_id,student_name,school_grades,test_score from Students  where student_id = %s'
+    z = 'select school_id, school_name, capacity,  school_district, min_score, adjust_ratio,count(Apply.student_id) as appled from Schools  natural join Apply where school_id = %s group by school_id '
+    temp=[]
+    temp.append(input('student_id: ')) 
     result = querytodatabase(x,0,*temp)
+    result2 = querytodatabase(y,0,*temp)
     
+    student = (result2[0]['student_id'],result2[0]['student_name'],result2[0]['school_grades'],result2[0]['test_score'])
+    # print(student)
+
+    schools=[]
+    schools_list=[]
+    for i in result:
+        schools.append(i['school_id'])
+    # print (schools)
+    for j in schools:
+        schools_list.append(getpassstudentlist([j]))
+    # print(schools_list)
+    for k in range(len(schools_list)):
+        if student in schools_list[k]:
+            print(querytodatabase(z,0,schools[k]))
+
 #J - 13. Reset database
 def resetdatabase():   
     try:
