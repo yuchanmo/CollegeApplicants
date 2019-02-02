@@ -220,6 +220,7 @@ def querytodatabase(sql,querytype=0, *args):
     sql : sqlstatement, 
     querytype : 0 => select clause, 1 => ddl clause,
     args : optional arguments for sql statement
+    return (1)fetch 시 tuples / (2) insert,remove등 진행시 반영 행수(cursor.rowcount)
     '''
     
     connection = pymysql.connect(
@@ -252,6 +253,13 @@ def querytodatabase(sql,querytype=0, *args):
 
 
 def inputwithpredicate(comment,dtype,predfunc=None,custom_errmsg=''):
+    '''
+        comment : 사용자 입력받을 때 입력안내 메시지,
+        dtype : 입력받으려는 data type,
+        --optional
+        predfunc : 입력받는 데이터에 대해서 data type 외 제약조건을 설정할때(lambda이용 or 함수)
+        errmsg : predfunc를 이용해서 검증할때 입력 에러 발생시 에러 메시지
+    '''
     typechecker = {
         0 : {'type' : [int,float],'errmsg' : 'Please enter integer/float value'},        
         1 : {'type' : [str], 'errmsg' : 'Please enter string value'}
@@ -309,7 +317,9 @@ def insertanewuniversity():
         #get values from user()
         #db table 에 trigger & stored procedure 로 제약조건 설정하였으나,실제 입력받을 때 실시간으로 피드배 받아 정상적으로 입력받게 유도
         temp=[]
-        temp.append(inputwithpredicate('University name: ',1))
+        univ = inputwithpredicate('University name: ',1)
+        univ = univ[:200] if len(univ) > 200 else univ
+        temp.append(univ)
         temp.append(inputwithpredicate('University capacity: ',0,lambda x : x>0,'Please enter a value over 0'))
         temp.append(inputwithpredicate('University group: ',1,lambda x : x.upper() in ('A','B','C'),'Please enter a value between A and C'))
         temp.append(inputwithpredicate('Cutline score: ',0,lambda x:x>0,'Please enter a value over 0'))
@@ -481,7 +491,11 @@ def printuniversitiesexpectedtoacceptastudent():
     # print(schools_list)
     for k in range(len(schools_list)):
         if student in schools_list[k]:
-            print(querytodatabase(z,0,schools[k]))
+            result = (querytodatabase(z,0,schools[k]))
+            print(scholls_head)   
+            for row in result:
+                print(str(row['school_id']) + '\t'+row['school_name'] + '\t'+str(row['capacity']) + '\t\t'+row['school_district'] + '\t'+str(row['min_score']) + '\t'+str(row['adjust_ratio']) + '\t'+ str(row['appled']) )
+            print(tail)
 
 #J - 13. Reset database
 def resetdatabase():   
@@ -497,7 +511,7 @@ Done to reset database. Executed commands below.
 2. Drop Procedure of Students & Schools for input constraint
 3. Create tables : Students & Schools -> Apply
 4. Reset Autoincrement columns : Students & Schools
-3. Create Procedure and Trigger of Students & Schools for input constraint
+5. Create Procedure and Trigger of Students & Schools for input constraint
 Please enter new data.''')    
     except Exception:
         print('Error occured while trying to reset database.')
@@ -540,22 +554,20 @@ def dumptestdateset():
 
 menu_num = 0
 menu_selection={
-    1:printalluniversities,
-    2:printallstudents,
-    3:insertanewuniversity,
-    4:removeauniversity,
-    5:insertanewstudent,
-    6:removeastudent,
-    7:makeaapplication,
-    8:printallstudentsappliedforauniversity,
-    9:printalluniversitiesastudentsappliedfor,
-    10:printexpectedsuccessfulapplicantsofauniversity,
-    11:printuniversitiesexpectedtoacceptastudent,    
-    13:resetdatabase,
-    14:dumptestdateset
+    1:printalluniversities, #1.모든학교 정보 출력
+    2:printallstudents, #2.모든 학생 정보 출력
+    3:insertanewuniversity, #3.학교 추가
+    4:removeauniversity, #4.학교 삭제
+    5:insertanewstudent, #5. 학생 추가
+    6:removeastudent, #6. 학생 삭제
+    7:makeaapplication, #7. 원서 접수
+    8:printallstudentsappliedforauniversity, #8. 학교에 지원한 학생 목록 출력
+    9:printalluniversitiesastudentsappliedfor, #9. 학생의 원서 접수 목록 출력
+    10:printexpectedsuccessfulapplicantsofauniversity, #10. 학교의 예상 합격자 목록 출력
+    11:printuniversitiesexpectedtoacceptastudent, #11. 학생의 예상 합격 대상 목록 출력
+    13:resetdatabase, #데이터베이스 리셋 및 생성
+    14:dumptestdateset #test목적으로 만든 dump function
 }
-
-
 
 def main():
     while True:
@@ -567,9 +579,9 @@ def main():
             print('Bye!')
             break
         else:
-            print('잘못된 번호 입력하였습니다')
+            print('1~13번 내 값을 입력하세요')
 
 if __name__ == '__main__':
-    con_info = connection_info_list['test']
+    con_info = connection_info_list['project']
     main()        
 
