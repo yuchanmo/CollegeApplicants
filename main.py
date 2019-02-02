@@ -52,10 +52,10 @@
 
 
 import pymysql
-
+import pymysql.cursors    
 
 ddlscripts = '''
-use ds3_4;|
+use project;|
 drop table if exists Apply cascade;|
 drop table if exists Schools cascade;|
 drop table if exists Students cascade;|
@@ -90,7 +90,12 @@ CREATE TABLE `Apply` (
   CONSTRAINT `fk_apply_student` FOREIGN KEY (`student_id`) REFERENCES `Students` (`student_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;|
 
-DELIMITER $$
+
+ALTER TABLE Schools AUTO_INCREMENT=1;|
+
+ALTER TABLE Students AUTO_INCREMENT=1;|
+
+
 create procedure check_school
 (in pname nvarchar(200),
  in pcapacity int,
@@ -108,27 +113,22 @@ begin
         SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = 'Please enter only A or B or C for school district';
     end if;
-end$$
+end|
 
-DELIMITER ;|
-
-DELIMITER $$
 CREATE TRIGGER `check_school_before_insert` BEFORE INSERT ON `Schools`
 FOR EACH ROW
-BEGIN
-    CALL check_school(new.school_name,new.capacity,new.school_district,new.min_score,new.adjust_ratio);
-END$$   
-DELIMITER ; |
+    BEGIN
+        CALL check_school(new.school_name,new.capacity,new.school_district,new.min_score,new.adjust_ratio);
+END|
 
-DELIMITER $$
+
 CREATE TRIGGER `check_school_before_update` BEFORE UPDATE ON `Schools`
 FOR EACH ROW
-BEGIN
-    CALL check_school(new.school_name,new.capacity,new.school_district,new.min_score,new.adjust_ratio);
-END$$   
-DELIMITER ;|
+    BEGIN
+        CALL check_school(new.school_name,new.capacity,new.school_district,new.min_score,new.adjust_ratio);
+END|
 
-DELIMITER $$
+
 create procedure check_student
 (
     in pname nvarchar(200),
@@ -145,24 +145,19 @@ begin
         SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = 'Please enter value between 0 and 100 for SchoolGrade';
     end if;
-end$$
-DELIMITER ;|
+end|
 
-DELIMITER $$
 CREATE TRIGGER `check_student_before_insert` BEFORE INSERT ON `Students`
 FOR EACH ROW
-BEGIN
-    CALL check_student(new.student_name,new.test_score,new.school_grades);
-END$$   
-DELIMITER ;|
+    BEGIN
+        CALL check_student(new.student_name,new.test_score,new.school_grades);
+END|
 
-DELIMITER $$
 CREATE TRIGGER `check_student_before_update` BEFORE UPDATE ON `Students`
 FOR EACH ROW
-BEGIN
-    CALL check_student(new.student_name,new.test_score,new.school_grades);
-END$$   
-DELIMITER;
+    BEGIN
+        CALL check_student(new.student_name,new.test_score,new.school_grades);
+END
 '''
 
 
@@ -200,14 +195,38 @@ menu_list ='''
 ======================================================================'''
 
 
+# connection information 분리, 테스트를 위한 정보와, 실제 project 정보 dictionary 형태로 분리
+connection_info_list ={
+    'test':{
+        'host':'localhost',
+        'user':'root',
+        'password':'1q2w3e4r5t!',
+        'db': 'project'
+    },
+    'project':{
+        'host' : 'ds1.snu.ac.kr',
+        'user' : 'ds3_4',
+        'password' : '1q2w3e4r5t',
+        'db': 'ds3_4_project'
+
+    }
+}
+con_info = None
+
+
 #db connection method
 def querytodatabase(sql,querytype=0, *args):
-    import pymysql.cursors
+    '''
+    sql : sqlstatement, 
+    querytype : 0 => select clause, 1 => ddl clause,
+    args : optional arguments for sql statement
+    '''
+    
     connection = pymysql.connect(
-        host = 'ds1.snu.ac.kr',
-        user = 'ds3_4',
-        password = '1q2w3e4r5t!',
-        db = 'ds3_4_project',
+        host = con_info['host'],
+        user = con_info['user'],
+        password = con_info['password'],
+        db = con_info['db'],
         charset = 'utf8',
         cursorclass = pymysql.cursors.DictCursor
     )
@@ -215,13 +234,14 @@ def querytodatabase(sql,querytype=0, *args):
     try:  
         with connection.cursor() as cursor:            
             cursor.execute(sql,args)
-            #print 구문
+            #query 목적
             if querytype == 0:
                 result = cursor.fetchall()  
 
             #ddl 실행시(insert/remove 등)
             else:
                 connection.commit()
+                result = cursor.rowcount
     except Exception as e:
         raise Exception
     
@@ -231,18 +251,28 @@ def querytodatabase(sql,querytype=0, *args):
 
 
 
-def inputwithpredicate(comment,dtype):
+def inputwithpredicate(comment,dtype,predfunc=None,custom_errmsg=''):
     typechecker = {
         0 : {'type' : [int,float],'errmsg' : 'Please enter integer/float value'},        
         1 : {'type' : [str], 'errmsg' : 'Please enter string value'}
     }
     p = True
+    #입력란에 대해 정상적으로 입력받기전까지 입력창 유지
     while p:
         try:
-            res = eval(input(comment)) if dtype == 0 else input(comment)
-            wanted_type = typechecker[dtype]['type']            
-            if type(res) in wanted_type:            
-                return res            
+            #숫자/정수형 입력란이면 eval 함수로 정확한 type 으로 type casting
+            res = eval(input(comment)) if dtype == 0 else input(comment)            
+            if type(res) in typechecker[dtype]['type'] :   
+
+                #db constraint 와 별도로 사용자가 입력시 실시간으로 피드백 주기 위한 입력 제약조건 함수실행
+                if predfunc==None:         
+                    return res            
+                else:
+                    if predfunc(res):
+                        return res
+                    else:
+                        print(custom_errmsg)
+            #입력받은 타입이 오류가 있을 시 타입관련 에러메시지
             else:
                 print(typechecker[dtype]['errmsg'])    
         except:
@@ -276,15 +306,21 @@ def printallstudents():
 # B - 3. Insert a new university    
 def insertanewuniversity():    
     try:
+        #get values from user()
+        #db table 에 trigger & stored procedure 로 제약조건 설정하였으나,실제 입력받을 때 실시간으로 피드배 받아 정상적으로 입력받게 유도
         temp=[]
         temp.append(inputwithpredicate('University name: ',1))
-        temp.append(inputwithpredicate('University capacity: ',0))
-        temp.append(inputwithpredicate('University group: ',1))
-        temp.append(inputwithpredicate('Cutline score: ',0))
-        temp.append(inputwithpredicate('Weight of high school records: ',0))
-        querytodatabase('insert into Schools(school_name,capacity,school_district,min_score,adjust_ratio) values(%s,%s,%s,%s,%s)',1,*temp)
-        print('A university is successfully inserted.')
-        p = False
+        temp.append(inputwithpredicate('University capacity: ',0,lambda x : x>0,'Please enter a value over 0'))
+        temp.append(inputwithpredicate('University group: ',1,lambda x : x.upper() in ('A','B','C'),'Please enter a value between A and C'))
+        temp.append(inputwithpredicate('Cutline score: ',0,lambda x:x>0,'Please enter a value over 0'))
+        temp.append(inputwithpredicate('Weight of high school records: ',0,lambda x : x>0,'Please enter a value over 0'))
+        #execute query with data from user
+        was_inserted = querytodatabase('insert into Schools(school_name,capacity,school_district,min_score,adjust_ratio) values(%s,%s,%s,%s,%s)',1,*temp)
+        if was_inserted:            
+            print('A university is successfully inserted.')
+        else:
+            print('No data inserted')
+        
     except pymysql.err.InternalError:
         print('your value is wrong. retry')        
 
@@ -293,21 +329,31 @@ def removeauniversity():
     try:
         temp=''
         temp=inputwithpredicate('school_id: ',0)
-        querytodatabase('delete from Schools where school_id = %s',1,temp)
-        print('A university is successfully deleted.')    
+        was_deleted = querytodatabase('delete from Schools where school_id = %s',1,temp)
+        if was_deleted:          
+            print('A university is successfully deleted.')    
+        else:
+            print('There is no university matching with id you entered')
+        
     except pymysql.err.InternalError:
         print('your value is wrong. retry')
 
 # C - 5. Insert a new student   
 def insertanewstudent():
     try:
+        #사용자로부터 정보 받기
+        #db table 에 trigger & stored procedure 로 제약조건 설정하였으나,실제 입력받을 때 실시간으로 피드배 받아 정상적으로 입력받게 유도
         temp=[]
         temp.append(inputwithpredicate('Student name: ',1))
         temp.append(inputwithpredicate('Test Score: ',0))
         temp.append(inputwithpredicate('School Grade: ',0))        
-        querytodatabase('insert into Students(student_name,test_score,school_grades) values (%s,%s,%s);',1,*temp)
-        print('A Student is successfully inserted.')
-        p = False
+
+        #입력받은 정보 db에 입력
+        was_inserted = querytodatabase('insert into Students(student_name,test_score,school_grades) values (%s,%s,%s);',1,*temp)
+        if was_inserted :
+            print('A Student is successfully inserted.')
+        else :
+            print('No data inserted')        
     except pymysql.err.InternalError:
         print('your value is wrong. retry')          
     
@@ -316,8 +362,11 @@ def insertanewstudent():
 def removeastudent():
     try:
         student_id = inputwithpredicate('Student ID : ',0)
-        querytodatabase('delete from Students where student_id = %s',1,*[student_id])   
-        print('A Student is successfully deleted.') 
+        was_deleted = querytodatabase('delete from Students where student_id = %s',1,*[student_id]) 
+        if was_deleted:          
+            print('A Student is successfully deleted.') 
+        else:
+            print('There is no student matching with id you entered')
     except pymysql.err.InternalError:
         print('your value is wrong. retry')          
 
@@ -328,16 +377,18 @@ def makeaapplication():
         temp=[]
         temp.append(inputwithpredicate('Student ID : ',0))
         temp.append(inputwithpredicate('School ID : ',0))
-        querytodatabase('insert into Apply select %s,school_id,school_district from Schools where school_id=%s  ',1,*temp)
-        print('Successfully made an application')
+        was_inserted = querytodatabase('insert into Apply select %s,school_id,school_district from Schools where school_id=%s  ',1,*temp)
+        if was_inserted:
+            print('Successfully made an application')
+        else:
+            print('No data inserted because of either of no student_id or no school_id')
     except pymysql.err.IntegrityError:
         print('You already aplly same school_district.')
     except Exception as e:
         print(str(e))
 
 #E - 8. Print all students who applied for a university
-def printallstudentsappliedforauniversity():
-    import pymysql
+def printallstudentsappliedforauniversity():    
     temp=''
     temp=input('school_id: ')
     result = querytodatabase('select student_id, student_name, test_score,school_grades from Schools natural join Apply natural join Students where school_id =%s',0,temp)
@@ -435,12 +486,55 @@ def printuniversitiesexpectedtoacceptastudent():
 #J - 13. Reset database
 def resetdatabase():   
     try:
+        print('Start to reset database.')
         querylist = ddlscripts.replace('\n','').split('|')
         for q in querylist:
+            print(q)
             querytodatabase(q,1)
-        print('Done to reset database. Please enter new data.')    
+        print('''
+Done to reset database. Executed commands below. 
+1. Drop tables : Apply -> Schools & Students
+2. Drop Procedure of Students & Schools for input constraint
+3. Create tables : Students & Schools -> Apply
+4. Reset Autoincrement columns : Students & Schools
+3. Create Procedure and Trigger of Students & Schools for input constraint
+Please enter new data.''')    
     except Exception:
         print('Error occured while trying to reset database.')
+
+#14 Test목적 dataset
+def dumptestdateset():
+    import sys
+    import os
+    try:
+        filepathlist = {
+            'Students': ['students_list.csv','insert into Students(student_id,student_name,test_score,school_grades) values (%s,%s,%s,%s)'],
+            'Schools' : ['university_list.csv','insert into Schools(school_name,capacity,school_district,min_score,adjust_ratio) values (%s,%s,%s,%s,%s)']
+        }
+
+        for tablename in filepathlist:
+            filepath = filepathlist[tablename][0]
+            sql = filepathlist[tablename][1]
+            filefullpath = os.path.join(os.getcwd() ,filepath)
+            with open(filefullpath,'r') as f:
+                header = f.readline()
+                rows = f.readlines()
+                for r in rows:
+                    params = list(map(lambda x : x.strip(), r.replace('\n','').split(',')))
+                    querytodatabase(sql,1,*params)   
+            print('Done to dump %s table.'%(tablename))
+
+        import random
+        random.seed(0)
+        schooldistrictrange = [(1,45),(62,126),(132,180)]
+        for studentid in range(1,201):                                    
+            templist = list(map(lambda rng : (studentid, random.randint(rng[0],rng[1])),schooldistrictrange))
+            for temp in templist:
+                querytodatabase('insert into Apply select %s,school_id,school_district from Schools where school_id=%s  ',1,*temp)
+        print('Done to dump %s table.'%('Apply'))
+
+    except:
+        print('occur error as insert dataset')
 
 
 
@@ -457,7 +551,8 @@ menu_selection={
     9:printalluniversitiesastudentsappliedfor,
     10:printexpectedsuccessfulapplicantsofauniversity,
     11:printuniversitiesexpectedtoacceptastudent,    
-    13:resetdatabase
+    13:resetdatabase,
+    14:dumptestdateset
 }
 
 
@@ -475,5 +570,6 @@ def main():
             print('잘못된 번호 입력하였습니다')
 
 if __name__ == '__main__':
+    con_info = connection_info_list['test']
     main()        
-        
+
