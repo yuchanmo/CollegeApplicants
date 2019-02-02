@@ -171,7 +171,7 @@ id\tname\t\tcapacity\tgroup\tcutline\tweight\tappled
 
 students_head ='''
 ----------------------------------------------------------------------
-id\tname\t\tcsat_score\tscholl_score
+id\tname\t\tcsat_score\tschool_score
 ----------------------------------------------------------------------'''
 
 tail='''
