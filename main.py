@@ -55,7 +55,7 @@ import pymysql
 import pymysql.cursors    
 
 ddlscripts = '''
-use project;|
+use ds3_4_project;|
 drop table if exists Apply cascade;|
 drop table if exists Schools cascade;|
 drop table if exists Students cascade;|
@@ -165,14 +165,14 @@ END
 
 #string format
 scholls_head ='''
-----------------------------------------------------------------------
-id\tname\t\tcapacity\tgroup\tcutline\tweight\tappled
-----------------------------------------------------------------------'''
+----------------------------------------------------------------------------------------------------------
+%-5s %-50s %-10s %-10s %-10s %-10s %-10s
+----------------------------------------------------------------------------------------------------------'''%('id','name','capacity','group','cutline','weight','applied')
 
 students_head ='''
-----------------------------------------------------------------------
-id\tname\t\tcsat_score\tschool_score
-----------------------------------------------------------------------'''
+----------------------------------------------------------------------------------------------------------
+%-5s %-30s %-10s %-10s
+----------------------------------------------------------------------------------------------------------'''%('id','name','test_score','tschool_score')
 
 tail='''
 ----------------------------------------------------------------------'''
@@ -196,17 +196,11 @@ menu_list ='''
 
 
 # connection information 분리, 테스트를 위한 정보와, 실제 project 정보 dictionary 형태로 분리
-connection_info_list ={
-    'test':{
-        'host':'localhost',
-        'user':'root',
-        'password':'1q2w3e4r5t!',
-        'db': 'project'
-    },
+connection_info_list ={    
     'project':{
         'host' : 'ds1.snu.ac.kr',
         'user' : 'ds3_4',
-        'password' : '1q2w3e4r5t',
+        'password' : '1q2w3e4r5t!',
         'db': 'ds3_4_project'
 
     }
@@ -299,7 +293,7 @@ def printalluniversities():
                         group by school_id''' 
     result = querytodatabase(sql,0)  
     for row in result:
-        print(str(row['school_id']) + '\t'+row['school_name'] + '\t'+str(row['capacity']) + '\t\t'+row['school_district'] + '\t'+str(row['min_score']) + '\t'+str(row['adjust_ratio']) + '\t'+ str(row['appled']) )
+        print('%-5s %-50s %-10s %-10s %-10s %-10s %-10s'%(row['school_id'],row['school_name'],str(row['capacity']),row['school_district'],str(row['min_score']),str(row['adjust_ratio']),str(row['appled'])))
     print(tail)
 
 # A - 2. Print all students
@@ -308,7 +302,7 @@ def printallstudents():
     sql = 'select * from Students'
     result = querytodatabase(sql,0)      
     for row in result:
-        print(str(row['student_id']) + '\t'+row['student_name'] + '\t\t'+str(row['test_score']) + '\t\t'+str(row['school_grades'])) 
+        print('%-5s %-30s %-10s %-10s'%(str(row['student_id']),row['student_name'],str(row['test_score']),str(row['school_grades'])))
     print(tail)
 
 # B - 3. Insert a new university    
@@ -355,8 +349,8 @@ def insertanewstudent():
         #db table 에 trigger & stored procedure 로 제약조건 설정하였으나,실제 입력받을 때 실시간으로 피드배 받아 정상적으로 입력받게 유도
         temp=[]
         temp.append(inputwithpredicate('Student name: ',1))
-        temp.append(inputwithpredicate('Test Score: ',0))
-        temp.append(inputwithpredicate('School Grade: ',0))        
+        temp.append(inputwithpredicate('Test Score: ',0,lambda x: (x>=0) and (x<=400),'Enter value between 0 and 400'))
+        temp.append(inputwithpredicate('School Grade: ',0,lambda x:(x>=0) and (x<=100),'Enter value between 0 and 100'))
 
         #입력받은 정보 db에 입력
         was_inserted = querytodatabase('insert into Students(student_name,test_score,school_grades) values (%s,%s,%s);',1,*temp)
@@ -405,7 +399,7 @@ def printallstudentsappliedforauniversity():
     if result:
         print(students_head)   
         for row in result:
-            print(str(row['student_id']) + '\t'+row['student_name'] + '\t\t'+str(row['test_score']) + '\t\t'+str(row['school_grades'])) 
+            print('%-5s %-30s %-10s %-10s'%(str(row['student_id']),row['student_name'],str(row['test_score']),str(row['school_grades'])))
         print(tail)                
     else:
         print('your value is wrong.')
@@ -418,7 +412,7 @@ def printalluniversitiesastudentsappliedfor():
     if result:
         print(scholls_head)
         for row in result:
-            print(str(row['school_id']) + '\t'+row['school_name'] + '\t'+str(row['capacity']) + '\t\t'+row['school_district'] + '\t'+str(row['min_score']) + '\t'+str(row['adjust_ratio']) + '\t'+ str(row['appled']) )
+            print('%-5s %-50s %-10s %-10s %-10s %-10s %-10s'%(row['school_id'],row['school_name'],str(row['capacity']),row['school_district'],str(row['min_score']),str(row['adjust_ratio']),str(row['appled'])))
         print(tail)
     else:
         print('your value is wrong.')
@@ -465,7 +459,7 @@ def printexpectedsuccessfulapplicantsofauniversity():
 
     print(students_head)   
     for row in sorted(list(set(result))):
-        print(str(row[0]) + '\t'+row[1] + '\t\t'+str(row[2]) + '\t\t'+str(row[3])) 
+        print('%-5s %-30s %-10s %-10s'%(str(row[0]),row[1],str(row[2]),str(row[3])))        
     print(tail) 
 
 #H - 11. Print universities expected to accept a student
@@ -494,7 +488,7 @@ def printuniversitiesexpectedtoacceptastudent():
             result = (querytodatabase(z,0,schools[k]))
             print(scholls_head)   
             for row in result:
-                print(str(row['school_id']) + '\t'+row['school_name'] + '\t'+str(row['capacity']) + '\t\t'+row['school_district'] + '\t'+str(row['min_score']) + '\t'+str(row['adjust_ratio']) + '\t'+ str(row['appled']) )
+                print('%-5s %-50s %-10s %-10s %-10s %-10s %-10s'%(row['school_id'],row['school_name'],str(row['capacity']),row['school_district'],str(row['min_score']),str(row['adjust_ratio']),str(row['appled'])))
             print(tail)
 
 #J - 13. Reset database
@@ -539,7 +533,7 @@ def dumptestdateset():
             print('Done to dump %s table.'%(tablename))
 
         import random
-        random.seed(0)
+        random.seed()
         schooldistrictrange = [(1,45),(62,126),(132,180)]
         for studentid in range(1,201):                                    
             templist = list(map(lambda rng : (studentid, random.randint(rng[0],rng[1])),schooldistrictrange))
