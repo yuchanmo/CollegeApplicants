@@ -172,7 +172,7 @@ scholls_head ='''
 students_head ='''
 ----------------------------------------------------------------------------------------------------------
 %-5s %-30s %-10s %-10s
-----------------------------------------------------------------------------------------------------------'''%('id','name','test_score','tschool_score')
+----------------------------------------------------------------------------------------------------------'''%('id','name','test_score','school_score')
 
 tail='''
 ----------------------------------------------------------------------'''
@@ -333,6 +333,9 @@ def removeauniversity():
     try:
         temp=''
         temp=inputwithpredicate('school_id: ',0)
+        was_univ_deleted = querytodatabase('delete from Apply where school_id = %s',1,temp)
+        if was_univ_deleted:
+            print('A university is successfully deleted from Apply table')
         was_deleted = querytodatabase('delete from Schools where school_id = %s',1,temp)
         if was_deleted:          
             print('A university is successfully deleted.')    
@@ -366,6 +369,9 @@ def insertanewstudent():
 def removeastudent():
     try:
         student_id = inputwithpredicate('Student ID : ',0)
+        was_stud_deleted = querytodatabase('delete from Apply where student_id = %s',1,*[student_id])
+        if was_stud_deleted:
+            print('A Student is successfully deleted from Apply table')
         was_deleted = querytodatabase('delete from Students where student_id = %s',1,*[student_id]) 
         if was_deleted:          
             print('A Student is successfully deleted.') 
@@ -386,10 +392,8 @@ def makeaapplication():
             print('Successfully made an application')
         else:
             print('No data inserted because of either of no student_id or no school_id')
-    except pymysql.err.IntegrityError:
-        print('You already aplly same school_district.')
     except Exception as e:
-        print(str(e))
+        print('You have already applied same school_district.')
 
 #E - 8. Print all students who applied for a university
 def printallstudentsappliedforauniversity():    
@@ -494,19 +498,21 @@ def printuniversitiesexpectedtoacceptastudent():
 #J - 13. Reset database
 def resetdatabase():   
     try:
-        print('Start to reset database.')
-        querylist = ddlscripts.replace('\n','').split('|')
-        for q in querylist:
-            print(q)
-            querytodatabase(q,1)
-        print('''
-Done to reset database. Executed commands below. 
-1. Drop tables : Apply -> Schools & Students
-2. Drop Procedure of Students & Schools for input constraint
-3. Create tables : Students & Schools -> Apply
-4. Reset Autoincrement columns : Students & Schools
-5. Create Procedure and Trigger of Students & Schools for input constraint
-Please enter new data.''')    
+        yesorno = input('정말 삭제하시겠습니까??(y/n)')
+        if yesorno =='y':
+            print('Start to reset database.')
+            querylist = ddlscripts.replace('\n','').split('|')
+            for q in querylist:
+                print(q)
+                querytodatabase(q,1)
+            print('''
+    Done to reset database. Executed commands below. 
+    1. Drop tables : Apply -> Schools & Students
+    2. Drop Procedure of Students & Schools for input constraint
+    3. Create tables : Students & Schools -> Apply
+    4. Reset Autoincrement columns : Students & Schools
+    5. Create Procedure and Trigger of Students & Schools for input constraint
+    Please enter new data.''')    
     except Exception:
         print('Error occured while trying to reset database.')
 
