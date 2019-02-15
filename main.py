@@ -1,3 +1,4 @@
+##sd
 # 실행예시
 # 가 - A, D, G
 # 나 - B, E, H
@@ -65,7 +66,7 @@ DROP PROCEDURE IF EXISTS check_student;|
 CREATE TABLE `Schools` (
   `school_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `school_name` varchar(200) NOT NULL,
-  `capacity` int(11) NOT NULL,
+  `capacity` int(11) unsigned NOT NULL,
   `school_district` char(2) NOT NULL,
   `min_score` int(10) unsigned NOT NULL,
   `adjust_ratio` float unsigned NOT NULL,
@@ -238,7 +239,9 @@ def querytodatabase(sql,querytype=0, *args):
                 connection.commit()
                 result = cursor.rowcount
     except Exception as e:
-        raise Exception
+        #raise Exception
+        print('입력한 데이터에 오류가 있습니다. 정해진 범위 내의 값으로 다시 입력 부탁드립니다.')
+        return 0
     
     finally:
         connection.close()
@@ -314,10 +317,10 @@ def insertanewuniversity():
         univ = inputwithpredicate('University name: ',1)
         univ = univ[:200] if len(univ) > 200 else univ
         temp.append(univ)
-        temp.append(inputwithpredicate('University capacity: ',0,lambda x : x>0,'Please enter a value over 0'))
-        temp.append(inputwithpredicate('University group: ',1,lambda x : x.upper() in ('A','B','C'),'Please enter a value between A and C'))
-        temp.append(inputwithpredicate('Cutline score: ',0,lambda x:x>0,'Please enter a value over 0'))
-        temp.append(inputwithpredicate('Weight of high school records: ',0,lambda x : x>0,'Please enter a value over 0'))
+        temp.append(inputwithpredicate('University capacity: ',0))#,lambda x : x>0,'Please enter a value over 0'))
+        temp.append(inputwithpredicate('University group: ',1))#,lambda x : x.upper() in ('A','B','C'),'Please enter a value between A and C'))
+        temp.append(inputwithpredicate('Cutline score: ',0))#,lambda x:x>0,'Please enter a value over 0'))
+        temp.append(inputwithpredicate('Weight of high school records: ',0))#,lambda x : x>0,'Please enter a value over 0'))
         #execute query with data from user
         was_inserted = querytodatabase('insert into Schools(school_name,capacity,school_district,min_score,adjust_ratio) values(%s,%s,%s,%s,%s)',1,*temp)
         if was_inserted:            
@@ -351,9 +354,11 @@ def insertanewstudent():
         #사용자로부터 정보 받기
         #db table 에 trigger & stored procedure 로 제약조건 설정하였으나,실제 입력받을 때 실시간으로 피드배 받아 정상적으로 입력받게 유도
         temp=[]
-        temp.append(inputwithpredicate('Student name: ',1))
-        temp.append(inputwithpredicate('Test Score: ',0,lambda x: (x>=0) and (x<=400),'Enter value between 0 and 400'))
-        temp.append(inputwithpredicate('School Grade: ',0,lambda x:(x>=0) and (x<=100),'Enter value between 0 and 100'))
+        stud = inputwithpredicate('Student name: ',1)
+        stud = stud[:200] if len(stud) > 200 else stud
+        temp.append(stud)        
+        temp.append(inputwithpredicate('Test Score: ',0))#,lambda x: (x>=0) and (x<=400),'Enter value between 0 and 400'))
+        temp.append(inputwithpredicate('School Grade: ',0))#,lambda x:(x>=0) and (x<=100),'Enter value between 0 and 100'))
 
         #입력받은 정보 db에 입력
         was_inserted = querytodatabase('insert into Students(student_name,test_score,school_grades) values (%s,%s,%s);',1,*temp)
