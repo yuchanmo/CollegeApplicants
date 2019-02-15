@@ -317,10 +317,10 @@ def insertanewuniversity():
         univ = inputwithpredicate('University name: ',1)
         univ = univ[:200] if len(univ) > 200 else univ
         temp.append(univ)
-        temp.append(inputwithpredicate('University capacity: ',0))#,lambda x : x>0,'Please enter a value over 0'))
-        temp.append(inputwithpredicate('University group: ',1))#,lambda x : x.upper() in ('A','B','C'),'Please enter a value between A and C'))
-        temp.append(inputwithpredicate('Cutline score: ',0))#,lambda x:x>0,'Please enter a value over 0'))
-        temp.append(inputwithpredicate('Weight of high school records: ',0))#,lambda x : x>0,'Please enter a value over 0'))
+        temp.append(inputwithpredicate('University capacity(>0) : ',0))#,lambda x : x>0,'Please enter a value over 0'))
+        temp.append(inputwithpredicate('University group(A,B,C): ',1))#,lambda x : x.upper() in ('A','B','C'),'Please enter a value between A and C'))
+        temp.append(inputwithpredicate('Cutline score(>=0): ',0))#,lambda x:x>0,'Please enter a value over 0'))
+        temp.append(inputwithpredicate('Weight of high school records(>=0): ',0))#,lambda x : x>0,'Please enter a value over 0'))
         #execute query with data from user
         was_inserted = querytodatabase('insert into Schools(school_name,capacity,school_district,min_score,adjust_ratio) values(%s,%s,%s,%s,%s)',1,*temp)
         if was_inserted:            
@@ -357,8 +357,8 @@ def insertanewstudent():
         stud = inputwithpredicate('Student name: ',1)
         stud = stud[:200] if len(stud) > 200 else stud
         temp.append(stud)        
-        temp.append(inputwithpredicate('Test Score: ',0))#,lambda x: (x>=0) and (x<=400),'Enter value between 0 and 400'))
-        temp.append(inputwithpredicate('School Grade: ',0))#,lambda x:(x>=0) and (x<=100),'Enter value between 0 and 100'))
+        temp.append(inputwithpredicate('Test Score(>=0 & <=400): ',0))#,lambda x: (x>=0) and (x<=400),'Enter value between 0 and 400'))
+        temp.append(inputwithpredicate('School Grade(>=0 & <=100): ',0))#,lambda x:(x>=0) and (x<=100),'Enter value between 0 and 100'))
 
         #입력받은 정보 db에 입력
         was_inserted = querytodatabase('insert into Students(student_name,test_score,school_grades) values (%s,%s,%s);',1,*temp)
@@ -576,14 +576,17 @@ menu_selection={
 
 def main():
     while True:
-        print(menu_list)
-        menu_num = eval(input('Select your action : '))        
-        if menu_num in menu_selection.keys():
-            menu_selection[menu_num]()
-        elif menu_num == 12:
-            print('Bye!')
-            break
-        else:
+        try:
+            print(menu_list)
+            menu_num = eval(input('Select your action : '))        
+            if menu_num in menu_selection.keys():
+                menu_selection[menu_num]()
+            elif menu_num == 12:
+                print('Bye!')
+                break
+            else:
+                print('1~13번 내 값을 입력하세요')
+        except:
             print('1~13번 내 값을 입력하세요')
 
 if __name__ == '__main__':
