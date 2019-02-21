@@ -202,7 +202,7 @@ connection_info_list ={
         'host' : 'ds1.snu.ac.kr',
         'user' : 'ds3_4',
         'password' : '1q2w3e4r5t!',
-        'db': 'ds3_4'
+        'db': 'ds3_4_project'
 
     }
 }
@@ -449,7 +449,6 @@ def getpassstudentlist(temp):
             sum=0
             temp=[]
             for i in test:
-                print(test)
                 for j in range(i):                    
                     if sum<=result[0]['capacity']*1.1:  
                         temp.append((result[j]['student_id'],result[j]['student_name'],result[j]['school_grades'],result[j]['test_score']))
